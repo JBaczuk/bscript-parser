@@ -1,2 +1,2 @@
-# node_bitcoin_script
+# Node Bitcoin Script
 Node Bitcoin script parser
