@@ -1,6 +1,6 @@
 {
   "name": "node-bitcoin-script",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node Bitcoin Script Parser",
   "main": "index.js",
   "scripts": {
