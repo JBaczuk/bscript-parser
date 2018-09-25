@@ -1,5 +1,5 @@
 # Node Bitcoin Script
-[![NPM](https://img.shields.io/npm/v/node-bitcoin-script.svg)](https://www.npmjs.org/package/node-bitcoin-script)
+[![NPM](https://img.shields.io/npm/v/node-bitcoin-script.svg)](https://www.npmjs.org/package/node-bitcoin-script)  
 Node Bitcoin script parser
 
 ## Installation
