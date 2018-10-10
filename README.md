@@ -10,7 +10,7 @@ $ npm i bscript-parser --save
 ## Usage
 You can parse raw hex string into an assembly string using:  
 ```
-> const nbs = require('node-bitcoin-script')
+> const nbs = require('bscript-parser')
 undefined
 > parsedScript = nbs.parseRawScript('a914c664139327b98043febeab6434eba89bb196d1af87', 'hex')
 'OP_HASH160 PUSHDATA(20)[c664139327b98043febeab6434eba89bb196d1af] OP_EQUAL'
