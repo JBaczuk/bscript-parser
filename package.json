@@ -1,6 +1,6 @@
 {
   "name": "node-bitcoin-script",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Node Bitcoin Script Parser",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,6 @@
     "bitcoin-ops": "^1.4.1"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^5.2.0"
+    "chai": "^4.1.2"
   }
 }
