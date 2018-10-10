@@ -1,5 +1,5 @@
 {
-  "name": "node-bitcoin-script",
+  "name": "bscript-parser",
   "version": "1.0.2",
   "description": "Node Bitcoin Script Parser",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JBaczuk/node-bitcoin-script.git"
+    "url": "git+https://github.com/JBaczuk/bscript-parser.git"
   },
   "author": "Jordan Baczuk",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JBaczuk/node-bitcoin-script/issues"
+    "url": "https://github.com/JBaczuk/bscript-parser/issues"
   },
-  "homepage": "https://github.com/JBaczuk/node-bitcoin-script#readme",
+  "homepage": "https://github.com/JBaczuk/bscript-parser#readme",
   "dependencies": {
     "bitcoin-ops": "^1.4.1"
   },

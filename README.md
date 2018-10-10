@@ -1,10 +1,10 @@
 # Node Bitcoin Script
-[![NPM](https://img.shields.io/npm/v/node-bitcoin-script.svg)](https://www.npmjs.org/package/node-bitcoin-script)  
+[![NPM](https://img.shields.io/npm/v/bscript-parser.svg)](https://www.npmjs.org/package/bscript-parser)  
 Node Bitcoin script parser
 
 ## Installation
 ```
-$ npm i node-bitcoin-script --save
+$ npm i bscript-parser --save
 ```
 
 ## Usage
