@@ -1,5 +1,4 @@
-const ops = require('bitcoin-ops')
-const rOps = require('bitcoin-ops/map')
+const opcodes = require('./opcodes')
 
 let parseRawScriptHex = function (rawScript, parsedScript) {
     let opStr = rawScript.substring(0,2)
@@ -21,7 +20,7 @@ let parseRawScriptHex = function (rawScript, parsedScript) {
         parsedScript += `${rawScript.substring(10, 10 + (2 * bytesToPush))} `
         rawScript = rawScript.substring(10 + (2 * bytesToPush))
     } else { // TODO: 77 and 78
-        parsedScript += `${rOps[op]} `
+        parsedScript += `${opcodes.wordForOpcode(op)} `
         rawScript = rawScript.substring(2)
     }
     if (rawScript.length > 0) {
@@ -55,5 +54,6 @@ let parseAsmScript = function () {
 }
 
 module.exports = {
-    parseRawScript: parseRawScript
+    parseRawScript,
+    opcodes
 }
