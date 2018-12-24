@@ -6,19 +6,19 @@ let parseRawScriptHex = function (rawScript, parsedScript) {
     let op = parseInt(opStr, 16)
     // Custom descriptors (not necessarily op codes)
     if (op > 0 && op < 76) {
-        parsedScript += `PUSHDATA(${op})[${rawScript.substring(2, 2+(2*op))}] `
+        parsedScript += `${rawScript.substring(2, 2+(2*op))} `
         rawScript = rawScript.substring(2+(2*op))
     } else if (op === 76) {
         let bytesToPush = parseInt(rawScript.substring(2, 4), 16)
-        parsedScript += `PUSHDATA(${bytesToPush})[${rawScript.substring(4, 4 + (2 * bytesToPush))}] `
+        parsedScript += `${rawScript.substring(4, 4 + (2 * bytesToPush))} `
         rawScript = rawScript.substring(4 + (2 * bytesToPush))
     } else if (op === 77) {
         let bytesToPush = Buffer.from(rawScript.substring(2, 6), 'hex').readUInt16LE()
-        parsedScript += `PUSHDATA(${bytesToPush})[${rawScript.substring(6, 6 + (2 * bytesToPush))}] `
+        parsedScript += `${rawScript.substring(6, 6 + (2 * bytesToPush))} `
         rawScript = rawScript.substring(6 + (2 * bytesToPush))
     } else if (op === 78) {
         let bytesToPush = Buffer.from(rawScript.substring(2, 10), 'hex').readUInt32LE()
-        parsedScript += `PUSHDATA(${bytesToPush})[${rawScript.substring(10, 10 + (2 * bytesToPush))}] `
+        parsedScript += `${rawScript.substring(10, 10 + (2 * bytesToPush))} `
         rawScript = rawScript.substring(10 + (2 * bytesToPush))
     } else { // TODO: 77 and 78
         parsedScript += `${rOps[op]} `
