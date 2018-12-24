@@ -4,9 +4,17 @@
   "description": "Node Bitcoin Script Parser",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "nyc mocha",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
+  },
+  "nyc": {
+    "reporter": [
+      "html",
+      "text",
+      "lcov",
+      "json-summary"
+    ]
   },
   "repository": {
     "type": "git",
@@ -27,6 +35,7 @@
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
   }
 }
