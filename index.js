@@ -13,13 +13,13 @@ let parseRawScriptHex = function (rawScript, parsedScript) {
         parsedScript += `PUSHDATA(${bytesToPush})[${rawScript.substring(4, 4 + (2 * bytesToPush))}] `
         rawScript = rawScript.substring(4 + (2 * bytesToPush))
     } else if (op === 77) {
-        let bytesToPush = parseInt(rawScript.substring(2, 6), 16)
+        let bytesToPush = Buffer.from(rawScript.substring(2, 6), 'hex').readUInt16LE()
         parsedScript += `PUSHDATA(${bytesToPush})[${rawScript.substring(6, 6 + (2 * bytesToPush))}] `
         rawScript = rawScript.substring(6 + (2 * bytesToPush))
     } else if (op === 78) {
-        let bytesToPush = parseInt(rawScript.substring(2, 8), 16)
-        parsedScript += `PUSHDATA(${bytesToPush})[${rawScript.substring(8, 8 + (2 * bytesToPush))}] `
-        rawScript = rawScript.substring(8 + (2 * bytesToPush))
+        let bytesToPush = Buffer.from(rawScript.substring(2, 10), 'hex').readUInt32LE()
+        parsedScript += `PUSHDATA(${bytesToPush})[${rawScript.substring(10, 10 + (2 * bytesToPush))}] `
+        rawScript = rawScript.substring(10 + (2 * bytesToPush))
     } else { // TODO: 77 and 78
         parsedScript += `${rOps[op]} `
         rawScript = rawScript.substring(2)
