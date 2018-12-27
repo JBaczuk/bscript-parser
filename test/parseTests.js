@@ -15,8 +15,6 @@ describe('Parse Tests', function () {
   })
 
   describe('parseAsmScript Tests', function () {
-    // these are disabled for now
-    return
     conversions.forEach(function (conversion) {
       describe(conversion.name, function () {
         it('returns the expected raw script', function () {
