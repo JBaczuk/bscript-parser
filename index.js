@@ -1,41 +1,16 @@
-const parseScript = require('./src/parseScript')
-const parseAsm = require('./src/parseAsm')
 const opcodes = require('./src/opcodes')
+const BScript = require('./src/bscript')
 
-let parseRawScript = function (rawScript, format = 'hex') {
-  if (typeof rawScript === 'string') {
-    rawScript = Buffer.from(rawScript, format)
-  }
-
-  if (!(rawScript instanceof Buffer)) {
-    throw new Error('Raw script must be a string or buffer')
-  }
-
-  const tokens = parseScript(rawScript)
-  return tokens.map((token) => token.toAsm()).join(' ')
+// to be deprecated
+BScript.parseRawScript = function (rawScript, encoding = 'hex') {
+  return BScript.fromRaw(rawScript, encoding).toAsm()
 }
 
-let parseAsmScript = function (asmScript, outputFormat = 'binary') {
-  if (typeof asmScript !== 'string') {
-    throw new Error('Assembly must be a string')
-  }
-
-  const tokens = parseAsm(asmScript)
-
-  const script = Buffer.concat(tokens.map((token) => token.toScript()))
-
-  switch (outputFormat) {
-    case 'binary':
-      return script
-    case 'hex':
-      return script.toString('hex')
-  }
-
-  throw new Error(`Unknown output format ${outputFormat}`)
+// to be deprecated
+BScript.parseAsmScript = function (asmScript, outputEncoding = null) {
+  return BScript.fromAsm(asmScript).toRaw(outputEncoding)
 }
 
-module.exports = {
-  parseRawScript,
-  parseAsmScript,
-  opcodes
-}
+BScript.opcodes = opcodes
+
+module.exports = BScript

@@ -9,25 +9,35 @@ $ npm i bscript-parser --save
 
 ## Usage
 You can parse raw hex string into an assembly string using:  
-```
-> const bscript = require('bscript-parser')
+```javascript
+> const BScript = require('bscript-parser')
 undefined
-> parsedScript = bscript.parseRawScript('a914c664139327b98043febeab6434eba89bb196d1af87', 'hex')
-'OP_HASH160 PUSHDATA(20)[c664139327b98043febeab6434eba89bb196d1af] OP_EQUAL'
+> const parsedScript = BScript.fromRaw('a914c664139327b98043febeab6434eba89bb196d1af87', 'hex')
+undefined
+> parseScript.toAsm()
+'OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL'
+```
+
+You can parse an assembly string into a raw script hex string using:  
+```javascript
+> const parsedAsm = BScript.fromAsm('OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL')
+undefined
+> parseAsm.toRaw('hex')
+'a914c664139327b98043febeab6434eba89bb196d1af87'
 ```
 
 The library also exposes several utility functions for getting information about bscript opcodes.
 
 ### Conversion between opcodes and asm terms
-```
-> bscript.opcodes.opcodeForWord('OP_EQUAL')
+```javascript
+> BScript.opcodes.opcodeForWord('OP_EQUAL')
 135
-> bscript.opcodes.wordForOpcode(135)
+> BScript.opcodes.wordForOpcode(135)
 'OP_EQUAL'
 ```
 
 ### Check if an opcode or asm term exists
-```
+```javascript
 > bscript.opcodes.opcodeIsValid(135)
 true
 > bscript.opcodes.opcodeIsValid(256)
@@ -39,7 +49,7 @@ false
 ```
 
 ### Check if an opcode or asm term is disabled
-```
+```javascript
 > bscript.opcodes.opcodeIsDisabled(135)
 false
 > bscript.opcodes.opcodeIsDisabled(126)
@@ -54,7 +64,7 @@ true
 
 **Note:** The data is taken from the [bitcoin.it wiki](https://en.bitcoin.it/wiki/Script).
 
-```
+```javascript
 > bscript.opcodes.descriptionForOpcode(135)
 'Returns 1 if the inputs are exactly equal, 0 otherwise.'
 > bscript.opcodes.descriptionForWord('OP_HASH160')
