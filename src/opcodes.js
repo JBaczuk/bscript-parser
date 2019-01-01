@@ -1,7 +1,7 @@
 const assert = require('assert')
 
-const opcodeInfoMap = require('./data/opcode_info_map')
-const wordInfoMap = require('./data/word_info_map')
+const opcodeInfoMap = require('../data/opcode_info_map')
+const wordInfoMap = require('../data/word_info_map')
 
 function opcodeForWord (word) {
   assert(wordIsValid(word), `${word} is not a valid term`)

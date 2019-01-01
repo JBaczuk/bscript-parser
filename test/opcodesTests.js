@@ -1,4 +1,4 @@
-const opcodes = require('../opcodes')
+const opcodes = require('../src/opcodes')
 const expect = require('chai').expect
 
 const {
