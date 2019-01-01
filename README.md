@@ -12,17 +12,15 @@ You can parse raw hex string into an assembly string using:
 ```javascript
 > const BScript = require('bscript-parser')
 undefined
-> const parsedScript = BScript.fromRaw('a914c664139327b98043febeab6434eba89bb196d1af87', 'hex')
-undefined
-> parseScript.toAsm()
+> BScript.rawToAsm('a914c664139327b98043febeab6434eba89bb196d1af87', 'hex')
 'OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL'
 ```
 
+
+
 You can parse an assembly string into a raw script hex string using:  
 ```javascript
-> const parsedAsm = BScript.fromAsm('OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL')
-undefined
-> parseAsm.toRaw('hex')
+> BScript.asmToRaw('OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL', 'hex')
 'a914c664139327b98043febeab6434eba89bb196d1af87'
 ```
 
