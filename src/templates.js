@@ -57,7 +57,30 @@ function matchScriptType (tokens) {
   })
 }
 
+function executeTemplate (template, values) {
+  let valuesIdx = 0
+  const tokens = template.map((token) => {
+    if (token.type === Token.PLACEHOLDER) {
+      const value = values[valuesIdx]
+      if (!(value instanceof Buffer)) {
+        throw new TypeError(`Provided value at index ${valuesIdx} must be a buffer`)
+      }
+      valuesIdx += 1
+      return Token.literal(value.slice(), null)
+    }
+
+    return token
+  })
+
+  if (valuesIdx !== values.length) {
+    throw new RangeError(`Too many values provided to template`)
+  }
+
+  return tokens
+}
+
 Object.assign(exports, templates, {
   matchScriptType,
-  scriptTypeMatches
+  scriptTypeMatches,
+  executeTemplate
 })
