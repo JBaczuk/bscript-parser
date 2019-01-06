@@ -61,4 +61,39 @@ describe('Parse Tests', function () {
       })
     })
   })
+
+  describe('fromAddress Tests', function () {
+    conversions.forEach(function (conversion) {
+      if (conversion.address) {
+        describe(conversion.address, function () {
+          it('calculates the correct script for an address', function () {
+            const parsed = script.fromAddress(conversion.address)
+            expect(parsed.toRaw('hex')).to.equal(conversion.raw)
+          })
+        })
+      }
+    })
+  })
+
+  describe('toAddress Tests', function () {
+    conversions.forEach(function (conversion) {
+      if (conversion.address) {
+        describe(conversion.address, function () {
+          it('converts the script to the correct address', function () {
+            const parsed = script.fromRaw(conversion.raw)
+            expect(parsed.hasAddress).to.equal(true)
+            expect(parsed.toAddress()).to.equal(conversion.address)
+          })
+        })
+      } else {
+        describe(conversion.name, function () {
+          it('does not have an address', function () {
+            const parsed = script.fromRaw(conversion.raw)
+            expect(parsed.hasAddress).to.equal(false)
+            expect(parsed.toAddress()).to.equal(undefined)
+          })
+        })
+      }
+    })
+  })
 })

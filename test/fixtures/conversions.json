@@ -7,27 +7,31 @@
   },
   {
     "name": "P2PKH scriptPubKey",
-    "asm": "OP_DUP OP_HASH160 769be9e30613eb5a67efe8ae03805079e8fd5d92 OP_EQUALVERIFY OP_CHECKSIG",
-    "raw": "76a914769be9e30613eb5a67efe8ae03805079e8fd5d9288ac",
-    "scriptType": "p2pkh"
+    "asm": "OP_DUP OP_HASH160 f54a5851e9372b87810a8e60cdd2e7cfd80b6e31 OP_EQUALVERIFY OP_CHECKSIG",
+    "raw": "76a914f54a5851e9372b87810a8e60cdd2e7cfd80b6e3188ac",
+    "scriptType": "p2pkh",
+    "address": "1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs"
   },
   {
     "name": "P2WPKH scriptPubKey",
     "asm": "OP_0 769be9e30613eb5a67efe8ae03805079e8fd5d92",
     "raw": "0014769be9e30613eb5a67efe8ae03805079e8fd5d92",
-    "scriptType": "p2wpkh"
+    "scriptType": "p2wpkh",
+    "address": "bc1qq28dxlfuvrp8666vlh73tsrspg8n68atkfqxqwfjl"
   },
   {
     "name": "P2WSH scriptPubKey",
     "asm": "OP_0 8e603acb2aae330e2fe77912f612997230b9154287be2dc646ed36159bbc0552",
     "raw": "00208e603acb2aae330e2fe77912f612997230b9154287be2dc646ed36159bbc0552",
-    "scriptType": "p2wpkh"
+    "scriptType": "p2wpkh",
+    "address": "bc1qqsgucp6ev42uvcw9lnhjyhkz2vhyv9ez4pg003dcerw6ds4nw7q25ssrrlcc"
   },
   {
     "name": "P2SH scriptPubkey",
-    "asm": "OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL",
-    "raw": "a914c664139327b98043febeab6434eba89bb196d1af87",
-    "scriptType": "p2sh"
+    "asm": "OP_HASH160 52973f3519d5d248004767efb874aa2a3b2b37ce OP_EQUAL",
+    "raw": "a91452973f3519d5d248004767efb874aa2a3b2b37ce87",
+    "scriptType": "p2sh",
+    "address": "39DiX6M1KX2MNvtm44eUu18qdgqxnJgTW8"
   },
   {
     "name": "P2SH scriptPubkey base64",
@@ -44,7 +48,9 @@
     "opts": {
       "opcodeStyle": "short",
       "literalStyle": "brackets"
-    }
+    },
+    "scriptType": "p2sh",
+    "address": "3Kn1bxgQwwqfCQCLtfErFFdqQLydN5t8ez"
   },
   {
     "name": "P2SH scriptPubkey alt asm 2",
@@ -53,7 +59,9 @@
     "opts": {
       "opcodeStyle": "short",
       "literalStyle": "verbose"
-    }
+    },
+    "scriptType": "p2sh",
+    "address": "3Kn1bxgQwwqfCQCLtfErFFdqQLydN5t8ez"
   },
   {
     "name": "P2SH scriptPubkey alt asm 3",
@@ -62,7 +70,9 @@
     "opts": {
       "opcodeStyle": "short",
       "literalStyle": "prefixed"
-    }
+    },
+    "scriptType": "p2sh",
+    "address": "3Kn1bxgQwwqfCQCLtfErFFdqQLydN5t8ez"
   },
   {
     "name": "P2SH scriptPubkey alt asm 4",
@@ -76,7 +86,9 @@
       "terms": {
         "OP_BEAGEL": 135
       }
-    }
+    },
+    "scriptType": "p2sh",
+    "address": "3Kn1bxgQwwqfCQCLtfErFFdqQLydN5t8ez"
   },
   {
     "name": "P2SH(P2WPKH) scriptSig",
