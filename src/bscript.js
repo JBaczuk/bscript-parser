@@ -1,6 +1,8 @@
 const bs58check = require('bs58check')
 const bech32lib = require('bech32')
 
+const Token = require('./token')
+
 const parseScript = require('./parseScript')
 const parseAsm = require('./parseAsm')
 const {
@@ -82,6 +84,21 @@ class BScript {
         return bech32lib.encode(bech32, bech32lib.toWords(this.toRaw()))
       }
     }
+  }
+
+  get redeemScript () {
+    if (this.tokens.length === 1 && this.tokens[0].type === Token.LITERAL) {
+      let redeemTokens
+      try {
+        redeemTokens = parseScript(this.tokens[0].value)
+      } catch (e) {
+        return undefined
+      }
+
+      return new BScript(redeemTokens)
+    }
+
+    // return undefined by default
   }
 
   static fromRaw (rawScript, encoding = 'hex') {
