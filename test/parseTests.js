@@ -50,4 +50,15 @@ describe('Parse Tests', function () {
       })
     })
   })
+
+  describe('scriptType Tests', function () {
+    conversions.forEach(function (conversion) {
+      describe(conversion.name, function () {
+        it('determines the correct script type', function () {
+          const parsed = script.fromRaw(conversion.raw, 'hex')
+          expect(parsed.scriptType).to.equal(conversion.scriptType)
+        })
+      })
+    })
+  })
 })
