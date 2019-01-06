@@ -17,6 +17,10 @@ const Token = module.exports = class Token {
     return new Token(Token.OPCODE, value, startIndex)
   }
 
+  static placeholder (value, startIndex) {
+    return new Token(Token.PLACEHOLDER, value, startIndex)
+  }
+
   toAsm () {
     if (this.type === Token.LITERAL) {
       if (this.value.length === 0) {
@@ -25,6 +29,8 @@ const Token = module.exports = class Token {
       return this.value.toString('hex')
     } else if (this.type === Token.OPCODE) {
       return wordForOpcode(this.value)
+    } else if (this.type === Token.PLACEHOLDER) {
+      return `<${this.value}>`
     }
   }
 
@@ -60,6 +66,9 @@ const Token = module.exports = class Token {
       const buf = Buffer.alloc(1)
       buf.writeUInt8(this.value)
       return buf
+    } else if (this.type === Token.PLACEHOLDER) {
+      // Return an OP_0 for a placeholder
+      return Buffer.from('00', 'hex')
     }
   }
 
@@ -70,3 +79,4 @@ const Token = module.exports = class Token {
 
 Token.LITERAL = 'LITERAL'
 Token.OPCODE = 'OPCODE'
+Token.PLACEHOLDER = 'PLACEHOLDER'

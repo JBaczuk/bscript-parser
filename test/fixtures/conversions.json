@@ -2,12 +2,32 @@
   {
     "name": "P2PK (Genesis Block) scriptPubkey",
     "asm": "0483a2eb1d9ae027fe47c8ec88e6d9e6a3903f5d0e5602fa232a0fe221dae256b17f8c6207229c6261a6659c12c59265a3299cbb0e45d180d15d7226f29323894d OP_CHECKSIG",
-    "raw": "410483a2eb1d9ae027fe47c8ec88e6d9e6a3903f5d0e5602fa232a0fe221dae256b17f8c6207229c6261a6659c12c59265a3299cbb0e45d180d15d7226f29323894dac"
+    "raw": "410483a2eb1d9ae027fe47c8ec88e6d9e6a3903f5d0e5602fa232a0fe221dae256b17f8c6207229c6261a6659c12c59265a3299cbb0e45d180d15d7226f29323894dac",
+    "scriptType": "p2pk"
+  },
+  {
+    "name": "P2PKH scriptPubKey",
+    "asm": "OP_DUP OP_HASH160 769be9e30613eb5a67efe8ae03805079e8fd5d92 OP_EQUALVERIFY OP_CHECKSIG",
+    "raw": "76a914769be9e30613eb5a67efe8ae03805079e8fd5d9288ac",
+    "scriptType": "p2pkh"
+  },
+  {
+    "name": "P2WPKH scriptPubKey",
+    "asm": "OP_0 769be9e30613eb5a67efe8ae03805079e8fd5d92",
+    "raw": "0014769be9e30613eb5a67efe8ae03805079e8fd5d92",
+    "scriptType": "p2wpkh"
+  },
+  {
+    "name": "P2WSH scriptPubKey",
+    "asm": "OP_0 8e603acb2aae330e2fe77912f612997230b9154287be2dc646ed36159bbc0552",
+    "raw": "00208e603acb2aae330e2fe77912f612997230b9154287be2dc646ed36159bbc0552",
+    "scriptType": "p2wpkh"
   },
   {
     "name": "P2SH scriptPubkey",
     "asm": "OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL",
-    "raw": "a914c664139327b98043febeab6434eba89bb196d1af87"
+    "raw": "a914c664139327b98043febeab6434eba89bb196d1af87",
+    "scriptType": "p2sh"
   },
   {
     "name": "P2SH(P2WPKH) scriptSig",
