@@ -1,5 +1,6 @@
 const parseScript = require('./parseScript')
 const parseAsm = require('./parseAsm')
+const { matchScriptType } = require('./templates')
 
 class BScript {
   constructor (tokens) {
@@ -46,6 +47,10 @@ class BScript {
 
     const tokens = parseAsm(asmScript, options)
     return new BScript(tokens)
+  }
+
+  get scriptType () {
+    return matchScriptType(this.tokens)
   }
 }
 

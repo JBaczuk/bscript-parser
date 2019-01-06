@@ -6,6 +6,7 @@ const {
 const {
   opcode,
   literal,
+  placeholder,
   LITERAL
 } = require('./token')
 
@@ -13,6 +14,8 @@ const HEX_CHARS = new Set('0123456789abcdefABCDEF')
 const DECIMAL_CHARS = new Set('0123456789')
 const L_SQUARE_BRACKET = '['
 const R_SQUARE_BRACKET = ']'
+const L_ANGLE_BRACKET = '<'
+const R_ANGLE_BRACKET = '>'
 const L_PAREN = '('
 const R_PAREN = ')'
 const ZERO = '0'
@@ -20,6 +23,7 @@ const WS = new Set(' \t\n\v')
 // const QUOTES = new Set('"\'')
 const X = new Set('x', 'X')
 const END_DATA_LITERAL = new Set(R_SQUARE_BRACKET)
+const END_PLACEHOLDER = new Set(R_ANGLE_BRACKET)
 const END_TERM = new Set(WS)
 END_TERM.add(undefined)
 
@@ -55,6 +59,8 @@ function nextOp (chars, idx, options) {
     return [undefined, idx]
   } else if (first === L_SQUARE_BRACKET) {
     return parseDataLiteral(chars, idx + 1, END_DATA_LITERAL, idx)
+  } else if (first === L_ANGLE_BRACKET && options.allowPlaceHolder === true) {
+    return parsePlaceHolder(chars, idx + 1, END_PLACEHOLDER, idx)
   } else if (first === ZERO) {
     const nextChar = peek(chars, idx, 1)
     if (X.has(nextChar)) {
@@ -114,6 +120,28 @@ function parseDataLiteral (chars, idx, terminator, start = idx) {
   const data = Buffer.from(hex.join(''), 'hex')
 
   return [literal(data, start), idx]
+}
+
+function parsePlaceHolder (chars, idx, terminator, start = idx) {
+  const string = []
+
+  let first = peek(chars, idx)
+  while (first !== undefined && !terminator.has(first)) {
+    string.push(first)
+    idx += 1
+    first = peek(chars, idx)
+  }
+
+  if (!terminator.has(first)) {
+    throw new Error(`Unterminated placeholder starting at position ${start}`)
+  }
+
+  // remove trailing `>`
+  idx += 1
+
+  const data = string.join('').trim()
+
+  return [placeholder(data, start), idx]
 }
 
 function parseTerm (chars, idx, options) {
