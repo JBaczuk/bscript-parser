@@ -10,6 +10,55 @@
     "raw": "a914c664139327b98043febeab6434eba89bb196d1af87"
   },
   {
+    "name": "P2SH scriptPubkey base64",
+    "asm": "OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL",
+    "raw": "qRTGZBOTJ7mAQ/6+q2Q066ibsZbRr4c=",
+    "opts": {
+      "encoding": "base64"
+    }
+  },
+  {
+    "name": "P2SH scriptPubkey alt asm 1",
+    "asm": "HASH160 [c664139327b98043febeab6434eba89bb196d1af] EQUAL",
+    "raw": "a914c664139327b98043febeab6434eba89bb196d1af87",
+    "opts": {
+      "opcodeStyle": "short",
+      "literalStyle": "brackets"
+    }
+  },
+  {
+    "name": "P2SH scriptPubkey alt asm 2",
+    "asm": "HASH160 PUSHDATA(20)[c664139327b98043febeab6434eba89bb196d1af] EQUAL",
+    "raw": "a914c664139327b98043febeab6434eba89bb196d1af87",
+    "opts": {
+      "opcodeStyle": "short",
+      "literalStyle": "verbose"
+    }
+  },
+  {
+    "name": "P2SH scriptPubkey alt asm 3",
+    "asm": "HASH160 0xc664139327b98043febeab6434eba89bb196d1af EQUAL",
+    "raw": "a914c664139327b98043febeab6434eba89bb196d1af87",
+    "opts": {
+      "opcodeStyle": "short",
+      "literalStyle": "prefixed"
+    }
+  },
+  {
+    "name": "P2SH scriptPubkey alt asm 4",
+    "asm": "HASH160 c664139327b98043febeab6434eba89bb196d1af BEAGEL",
+    "raw": "a914c664139327b98043febeab6434eba89bb196d1af87",
+    "opts": {
+      "opcodeStyle": "short",
+      "opcodes": {
+        "135": "BEAGEL"
+      },
+      "terms": {
+        "OP_BEAGEL": 135
+      }
+    }
+  },
+  {
     "name": "P2SH(P2WPKH) scriptSig",
     "asm": "0014d3530760601a3af53c7c93b01dfaf08d1ab156e0",
     "raw": "160014d3530760601a3af53c7c93b01dfaf08d1ab156e0"

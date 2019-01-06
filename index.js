@@ -1,16 +1,36 @@
 const opcodes = require('./src/opcodes')
 const BScript = require('./src/bscript')
 
-BScript.rawToAsm = function (rawScript, encoding = 'hex') {
-  return BScript.fromRaw(rawScript, encoding).toAsm()
+BScript.rawToAsm = function (rawScript, optionsOrEncoding = {}) {
+  let options = optionsOrEncoding
+
+  if (typeof options === 'string') {
+    options = { encoding: options }
+  }
+
+  const {
+    encoding = 'hex'
+  } = options
+
+  return BScript.fromRaw(rawScript, encoding).toAsm(options)
 }
 
-BScript.asmToRaw = function (asmScript, outputEncoding = null) {
-  return BScript.fromAsm(asmScript).toRaw(outputEncoding)
+BScript.asmToRaw = function (asmScript, optionsOrEncoding = null) {
+  let options = optionsOrEncoding
+
+  if (typeof options === 'string') {
+    options = { encoding: options }
+  }
+
+  const {
+    encoding = 'hex'
+  } = options
+
+  return BScript.fromAsm(asmScript, options).toRaw(encoding)
 }
 
-BScript.formatAsm = function (asmScript) {
-  return BScript.fromAsm(asmScript).toAsm()
+BScript.formatAsm = function (asmScript, options = {}) {
+  return BScript.fromAsm(asmScript, options).toAsm(options)
 }
 
 // to be deprecated

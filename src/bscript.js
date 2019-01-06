@@ -6,9 +6,9 @@ class BScript {
     this.tokens = tokens
   }
 
-  toAsm () {
+  toAsm (options = {}) {
     // convert to assembly
-    return this.tokens.map((token) => token.toAsm()).join(' ')
+    return this.tokens.map((token) => token.toAsm(options)).join(' ')
   }
 
   toRaw (outputEncoding = null) {
@@ -26,7 +26,7 @@ class BScript {
     throw new Error(`Unsupported output encoding ${outputEncoding}`)
   }
 
-  static fromRaw (rawScript, encoding = 'hex') {
+  static fromRaw (rawScript, encoding) {
     if (typeof rawScript === 'string') {
       rawScript = Buffer.from(rawScript, encoding)
     }
@@ -39,12 +39,12 @@ class BScript {
     return new BScript(tokens)
   }
 
-  static fromAsm (asmScript) {
+  static fromAsm (asmScript, options = {}) {
     if (typeof asmScript !== 'string') {
       throw new TypeError('Assembly must be a string')
     }
 
-    const tokens = parseAsm(asmScript)
+    const tokens = parseAsm(asmScript, options)
     return new BScript(tokens)
   }
 }

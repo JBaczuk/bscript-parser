@@ -24,6 +24,7 @@ function parseScript (bytes) {
 function nextOp (bytes, idx) {
   const op = bytes.readUInt8(idx)
   const start = idx
+
   if (op > 0 && op < 76) {
     idx += 1
     const buf = Buffer.alloc(op)

@@ -17,14 +17,47 @@ const Token = module.exports = class Token {
     return new Token(Token.OPCODE, value, startIndex)
   }
 
-  toAsm () {
+  toAsm (options = {}) {
     if (this.type === Token.LITERAL) {
-      if (this.value.length === 0) {
-        return '0'
+      const {
+        literalStyle = 'normal'
+      } = options
+
+      switch (literalStyle) {
+        case 'normal':
+        default:
+          if (this.value.length === 0) {
+            return '0'
+          }
+          return this.value.toString('hex')
+        case 'brackets':
+          return `[${this.value.toString('hex')}]`
+        case 'prefixed':
+          if (this.value.length === 0) {
+            return '0'
+          }
+          return `0x${this.value.toString('hex')}`
+        case 'verbose':
+          return `PUSHDATA(${this.value.length})[${this.value.toString('hex')}]`
       }
-      return this.value.toString('hex')
     } else if (this.type === Token.OPCODE) {
-      return wordForOpcode(this.value)
+      const {
+        opcodeStyle = 'normal',
+        opcodes = {}
+      } = options
+
+      if (typeof opcodes[this.value] === 'string') {
+        return opcodes[this.value]
+      }
+
+      const term = wordForOpcode(this.value)
+      switch (opcodeStyle) {
+        case 'normal':
+        default:
+          return term
+        case 'short':
+          return term.substr(3)
+      }
     }
   }
 
