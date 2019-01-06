@@ -1,6 +1,6 @@
 const expect = require('chai').expect
-const parseAsm = require('../parseAsm')
-const Token = require('../token')
+const parseAsm = require('../src/parseAsm')
+const Token = require('../src/token')
 
 describe('parseAsm', function () {
   it('correctly parses a term', function () {

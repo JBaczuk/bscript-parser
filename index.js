@@ -1,6 +1,6 @@
-const parseScript = require('./parseScript')
-const parseAsm = require('./parseAsm')
-const opcodes = require('./opcodes')
+const parseScript = require('./src/parseScript')
+const parseAsm = require('./src/parseAsm')
+const opcodes = require('./src/opcodes')
 
 let parseRawScript = function (rawScript, format = 'hex') {
   if (typeof rawScript === 'string') {
