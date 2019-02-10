@@ -15,10 +15,10 @@ BScript.rawToAsm = function (rawScript, optionsOrEncoding = {}) {
   return BScript.fromRaw(rawScript, encoding).toAsm(options)
 }
 
-BScript.asmToRaw = function (asmScript, optionsOrEncoding = null) {
+BScript.asmToRaw = function (asmScript, optionsOrEncoding = {}) {
   let options = optionsOrEncoding
 
-  if (typeof options === 'string') {
+  if (options == null || typeof options === 'string') {
     options = { encoding: options }
   }
 
