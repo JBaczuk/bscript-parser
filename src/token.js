@@ -3,18 +3,19 @@ const {
 } = require('./opcodes')
 
 const Token = module.exports = class Token {
-  constructor (type, value, startIndex) {
+  constructor (type, value, startIndex, endIndex) {
     this.type = type
     this.value = value
     this.startIndex = startIndex
+    this.endIndex = endIndex
   }
 
-  static literal (value, startIndex) {
-    return new Token(Token.LITERAL, value, startIndex)
+  static literal (value, startIndex, endIndex) {
+    return new Token(Token.LITERAL, value, startIndex, endIndex)
   }
 
-  static opcode (value, startIndex) {
-    return new Token(Token.OPCODE, value, startIndex)
+  static opcode (value, startIndex, endIndex) {
+    return new Token(Token.OPCODE, value, startIndex, endIndex)
   }
 
   static placeholder (value, startIndex) {

@@ -30,7 +30,7 @@ function nextOp (bytes, idx) {
     const buf = Buffer.alloc(op)
     bytes.copy(buf, 0, idx, idx + op)
     idx += op
-    return [literal(buf, start), idx]
+    return [literal(buf, start, idx), idx]
   } else if (op === 76) {
     idx += 1
     const size = bytes.readUInt8(idx)
@@ -38,7 +38,7 @@ function nextOp (bytes, idx) {
     const buf = Buffer.alloc(size)
     bytes.copy(buf, 0, idx, idx + size)
     idx += size
-    return [literal(buf, start), idx]
+    return [literal(buf, start, idx), idx]
   } else if (op === 77) {
     idx += 1
     const size = bytes.readUInt16LE(idx)
@@ -46,7 +46,7 @@ function nextOp (bytes, idx) {
     const buf = Buffer.alloc(size)
     bytes.copy(buf, 0, idx, idx + size)
     idx += size
-    return [literal(buf, start), idx]
+    return [literal(buf, start, idx), idx]
   } else if (op === 78) {
     idx += 1
     const size = bytes.readUInt32LE(idx)
@@ -54,11 +54,11 @@ function nextOp (bytes, idx) {
     const buf = Buffer.alloc(size)
     bytes.copy(buf, 0, idx, idx + size)
     idx += size
-    return [literal(buf, start), idx]
+    return [literal(buf, start, idx), idx]
   } else if (!opcodeIsValid(op)) {
     // invalid op
     throw new Error(`Opcode ${op} at index ${start} is not valid`)
   }
 
-  return [opcode(op, start), idx + 1]
+  return [opcode(op, start, idx + 1), idx + 1]
 }

@@ -3,7 +3,17 @@
     "name": "P2PK (Genesis Block) scriptPubkey",
     "asm": "0483a2eb1d9ae027fe47c8ec88e6d9e6a3903f5d0e5602fa232a0fe221dae256b17f8c6207229c6261a6659c12c59265a3299cbb0e45d180d15d7226f29323894d OP_CHECKSIG",
     "raw": "410483a2eb1d9ae027fe47c8ec88e6d9e6a3903f5d0e5602fa232a0fe221dae256b17f8c6207229c6261a6659c12c59265a3299cbb0e45d180d15d7226f29323894dac",
-    "scriptType": "p2pk"
+    "scriptType": "p2pk",
+    "tokens": {
+      "asm": [
+        ["LITERAL", "0483a2eb1d9ae027fe47c8ec88e6d9e6a3903f5d0e5602fa232a0fe221dae256b17f8c6207229c6261a6659c12c59265a3299cbb0e45d180d15d7226f29323894d", 0, 130],
+        ["OPCODE", "OP_CHECKSIG", 131, 142]
+      ],
+      "raw": [
+        ["LITERAL", "0483a2eb1d9ae027fe47c8ec88e6d9e6a3903f5d0e5602fa232a0fe221dae256b17f8c6207229c6261a6659c12c59265a3299cbb0e45d180d15d7226f29323894d", 0, 66],
+        ["OPCODE", "OP_CHECKSIG", 66, 67]
+      ]
+    }
   },
   {
     "name": "P2PKH scriptPubKey",
@@ -31,7 +41,19 @@
     "asm": "OP_HASH160 52973f3519d5d248004767efb874aa2a3b2b37ce OP_EQUAL",
     "raw": "a91452973f3519d5d248004767efb874aa2a3b2b37ce87",
     "scriptType": "p2sh",
-    "address": "39DiX6M1KX2MNvtm44eUu18qdgqxnJgTW8"
+    "address": "39DiX6M1KX2MNvtm44eUu18qdgqxnJgTW8",
+    "tokens": {
+      "asm": [
+        ["OPCODE", "OP_HASH160", 0, 10],
+        ["LITERAL", "52973f3519d5d248004767efb874aa2a3b2b37ce", 11, 51],
+        ["OPCODE", "OP_EQUAL", 52, 60]
+      ],
+      "raw": [
+        ["OPCODE", "OP_HASH160", 0, 1],
+        ["LITERAL", "52973f3519d5d248004767efb874aa2a3b2b37ce", 1, 22],
+        ["OPCODE", "OP_EQUAL", 22, 23]
+      ]
+    }
   },
   {
     "name": "P2SH scriptPubkey base64",
@@ -93,12 +115,30 @@
   {
     "name": "P2SH(P2WPKH) scriptSig",
     "asm": "0014d3530760601a3af53c7c93b01dfaf08d1ab156e0",
-    "raw": "160014d3530760601a3af53c7c93b01dfaf08d1ab156e0"
+    "raw": "160014d3530760601a3af53c7c93b01dfaf08d1ab156e0",
+    "tokens": {
+      "asm": [
+        ["LITERAL", "0014d3530760601a3af53c7c93b01dfaf08d1ab156e0", 0, 44]
+      ],
+      "raw": [
+        ["LITERAL", "0014d3530760601a3af53c7c93b01dfaf08d1ab156e0", 0, 23]
+      ]
+    }
   },
   {
     "name": "OP_RETURN scriptPubKey < 76 bytes",
     "asm": "OP_RETURN 636861726c6579206c6f766573206865696469",
-    "raw": "6a13636861726c6579206c6f766573206865696469"
+    "raw": "6a13636861726c6579206c6f766573206865696469",
+    "tokens": {
+      "asm": [
+        ["OPCODE", "OP_RETURN", 0, 9],
+        ["LITERAL", "636861726c6579206c6f766573206865696469", 10, 48]
+      ],
+      "raw": [
+        ["OPCODE", "OP_RETURN", 0, 1],
+        ["LITERAL", "636861726c6579206c6f766573206865696469", 1, 21]
+      ]
+    }
   },
   {
     "name": "OP_RETURN scriptPubKey OP_PUSHDATA1",
