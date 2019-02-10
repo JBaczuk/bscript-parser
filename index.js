@@ -1,3 +1,5 @@
+const deprecate = require('depd')('bscript-parser')
+
 const opcodes = require('./src/opcodes')
 const BScript = require('./src/bscript')
 
@@ -13,9 +15,17 @@ BScript.formatAsm = function (asmScript) {
   return BScript.fromAsm(asmScript).toAsm()
 }
 
-// to be deprecated
-BScript.parseRawScript = BScript.rawToAsm
-BScript.parseAsmScript = BScript.asmToRaw
+BScript.parseRawScript = deprecate.function(
+  BScript.rawToAsm,
+  'BScript.parseRawScript is deprecated and will be removed in a future version. ' +
+  'Please use BScript.rawToAsm instead.'
+)
+
+BScript.parseAsmScript = deprecate.function(
+  BScript.asmToRaw,
+  'BScript.parseAsmScript is deprecated and will be removed in a future version. ' +
+  'Please use BScript.asmToRaw instead.'
+)
 
 BScript.opcodes = opcodes
 
