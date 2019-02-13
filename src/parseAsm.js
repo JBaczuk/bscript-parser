@@ -27,14 +27,14 @@ END_TERM.add(undefined)
 const TERM_CHARS = new Set('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_012356789')
 
 module.exports = parseAsm
-function parseAsm (asmText) {
+function parseAsm (asmText, options = {}) {
   let chars = Array.from(asmText)
   let idx = 0
   let token
   const l = chars.length
   const tokens = []
   while (idx < l) {
-    [token, idx] = nextOp(chars, idx)
+    [token, idx] = nextOp(chars, idx, options)
     if (token != null) {
       tokens.push(token)
     }
@@ -43,7 +43,7 @@ function parseAsm (asmText) {
   return tokens
 }
 
-function nextOp (chars, idx) {
+function nextOp (chars, idx, options) {
   let first = peek(chars, idx)
   while (WS.has(first)) {
     // remove whitespace
@@ -67,11 +67,19 @@ function nextOp (chars, idx) {
       // hex literal
       return parseDataLiteral(chars, idx, END_TERM)
     }
-  } else if (HEX_CHARS.has(first)) {
-    return parseDataLiteral(chars, idx, END_TERM)
   } else if (TERM_CHARS.has(first)) {
     // opcode
-    return parseTerm(chars, idx)
+    try {
+      return parseTerm(chars, idx, options)
+    } catch (e) {
+      if (HEX_CHARS.has(first)) {
+        return parseDataLiteral(chars, idx, END_TERM)
+      }
+
+      throw e
+    }
+  } else if (HEX_CHARS.has(first)) {
+    return parseDataLiteral(chars, idx, END_TERM)
   }
 
   throw new Error(`Unexpected character at posotion ${idx}`)
@@ -108,7 +116,11 @@ function parseDataLiteral (chars, idx, terminator, start = idx) {
   return [literal(data, start), idx]
 }
 
-function parseTerm (chars, idx) {
+function parseTerm (chars, idx, options) {
+  const {
+    terms = {}
+  } = options
+
   const start = idx
   let first = peek(chars, idx)
   let term = []
@@ -158,6 +170,15 @@ function parseTerm (chars, idx) {
   }
 
   term = term.join('').toUpperCase()
+  if (!term.startsWith('OP_')) {
+    term = `OP_${term}`
+  }
+
+  // allow terms to be overriden
+  if (typeof terms[term] === 'number') {
+    return [opcode(terms[term], start), idx]
+  }
+
   if (!wordIsValid(term)) {
     // invalid term
     throw new Error(`Unknown term ${term} found at position ${start}`)
