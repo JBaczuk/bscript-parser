@@ -66,7 +66,7 @@ describe('parseAsm', function () {
   })
 
   it('is tolerant of white space', function () {
-    const parsed = parseAsm(' \n\tOP_EQUAL \n\t')
+    const parsed = parseAsm(' \n\tOP_EQUAL \n\t \v\f\r')
     expect(parsed).to.deep.equal([
       Token.opcode(135, 3, 11)
     ])
