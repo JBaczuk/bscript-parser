@@ -2,7 +2,31 @@ const {
   wordForOpcode
 } = require('./opcodes')
 
-const Token = module.exports = class Token {
+/**
+ * A Token represents a parsed part of a bscript.
+ *
+ * There are three types of tokens:
+ *
+ * - A literal (PUSH_DATA data)
+ * - An opcode
+ * - A placeholder (for template scripts only)
+ *
+ * @param {string} type - One of `Token.LITERAL`, `Token.OPCODE`, or `Token.PLACEHOLDER`
+ * @param {Buffer|number|string} value - The value of the token.
+ *    For a literal, this is the raw pushed data as a Buffer (without the push data opcode).
+ *    For an opcode, this is the opcode as an integer.
+ *    For a placeholder, it is  the placeholder string.
+ * @param {number} startIndex - The position within the asm text or raw script where the
+ *    token beings. Note: if source of the script is a raw script that is string encoded,
+ *    the startIndex is the index within the buffer, not the original encoded string.
+ * @param {number} endIndex - The position within the asm text or raw script where the
+ *    token ends. Note: if source of the script is a raw script that is string encoded,
+ *    the endIndex is the index within the buffer, not the original encoded string.
+ * @example
+ * const {Token} = require('bscript-parser')
+ * token = new Token(Token.LITERAL, Buffer.from('abcdef0123', 'hex'), 0, 10)
+ */
+class Token {
   constructor (type, value, startIndex, endIndex) {
     this.type = type
     this.value = value
@@ -10,18 +34,57 @@ const Token = module.exports = class Token {
     this.endIndex = endIndex
   }
 
+  /**
+   * A short-hand helper to create a `Token.LITERAL` token.
+   *
+   * @param {Buffer} value - The push data value. See the parameters for [Token](#token).
+   * @param {number} startIndex - See the parameters for [Token](#token)
+   * @param {number} endIndex - See the parameters for [Token](#token)
+   * @return {Token}
+   */
   static literal (value, startIndex, endIndex) {
     return new Token(Token.LITERAL, value, startIndex, endIndex)
   }
 
+  /**
+   * A short-hand helper to create a `Token.OPCODE` token.
+   *
+   * @param {integer} value - The opcode value. See the parameters for [Token](#token).
+   * @param {number} startIndex - See the parameters for [Token](#token)
+   * @param {number} endIndex - See the parameters for [Token](#token)
+   * @return {Token}
+   */
   static opcode (value, startIndex, endIndex) {
     return new Token(Token.OPCODE, value, startIndex, endIndex)
   }
 
-  static placeholder (value, startIndex) {
-    return new Token(Token.PLACEHOLDER, value, startIndex)
+  /**
+   * A short-hand helper to create a `Token.PLACEHOLDER` token.
+   *
+   * @param {string} value - The placeholder string. See the parameters for [Token](#token).
+   * @param {number} startIndex - See the parameters for [Token](#token)
+   * @param {number} endIndex - See the parameters for [Token](#token)
+   * @return {Token}
+   */
+  static placeholder (value, startIndex, endIndex) {
+    return new Token(Token.PLACEHOLDER, value, startIndex, endIndex)
   }
 
+  /**
+   * Convert a token into an asm string.
+   *
+   * @param {Options} options - Options for asm stringification.
+   *    The `literalStyle`, and `opcodeStyle` parameters are relevant to this method.
+   * @return {string} The token's asm representation.
+   * @example
+   * const token = Token.literal(Buffer.from('c664139327b98043febeab6434eba89bb196d1af', 'hex'))
+   * const asm = token.toAsm({literalStyle: 'verbose'})
+   * assert.equal('PUSH_DATA(20)[c664139327b98043febeab6434eba89bb196d1af]', asm)
+   * @example
+   * const token = Token.opcode(0xa9)
+   * const asm = token.toAsm({opcodeStyle: 'short'})
+   * assert.equal('HASH160', asm)
+   */
   toAsm (options = {}) {
     if (this.type === Token.LITERAL) {
       const {
@@ -68,6 +131,22 @@ const Token = module.exports = class Token {
     }
   }
 
+  /**
+   * Convert a token into its raw script representation.
+   *
+   * @return {Buffer} The token's raw bscript representation.
+   * @example
+   * const data = Buffer.from('c664139327b98043febeab6434eba89bb196d1af', 'hex')
+   * const expected = Buffer.from('14c664139327b98043febeab6434eba89bb196d1af', 'hex')
+   * const token = Token.literal(data)
+   * const raw = token.toScript()
+   * assert.equal(0, expected.compare(raw))
+   * @example
+   * const token = Token.opcode(0xa9)
+   * const expexted = Buffer.from([0xa9])
+   * const raw = token.toScript()
+   * assert.equal(0, expected.compare(raw))
+   */
   toScript () {
     if (this.type === Token.LITERAL) {
       if (this.value.length < 76) {
@@ -106,11 +185,35 @@ const Token = module.exports = class Token {
     }
   }
 
+  /**
+   * Convert to an asm string.
+   *
+   * @return {string}
+   */
   toString () {
     return this.toAsm()
   }
 }
 
+/**
+ * Constant for the `type` property of a literal token.
+ *
+ * @type {string}
+ */
 Token.LITERAL = 'LITERAL'
+
+/**
+ * Constant for the `type` property of an opcode token.
+ *
+ * @type {string}
+ */
 Token.OPCODE = 'OPCODE'
+
+/**
+ * Constant for the `type` property of a placeholder token.
+ *
+ * @type {string}
+ */
 Token.PLACEHOLDER = 'PLACEHOLDER'
+
+module.exports = Token
