@@ -2,28 +2,269 @@
 
 ### Table of Contents
 
--   [rawToAsm][1]
+-   [BScript][1]
     -   [Parameters][2]
     -   [Examples][3]
--   [asmToRaw][4]
-    -   [Parameters][5]
-    -   [Examples][6]
--   [formatAsm][7]
-    -   [Parameters][8]
-    -   [Examples][9]
--   [Options][10]
-    -   [Properties][11]
+    -   [tokens][4]
+    -   [toAsm][5]
+        -   [Parameters][6]
+        -   [Examples][7]
+    -   [toRaw][8]
+        -   [Parameters][9]
+        -   [Examples][10]
+    -   [toAddress][11]
+        -   [Parameters][12]
+        -   [Examples][13]
+    -   [scriptType][14]
+        -   [Examples][15]
+    -   [hasAddress][16]
+        -   [Examples][17]
+    -   [redeemScript][18]
+        -   [Examples][19]
+    -   [rawToAsm][20]
+        -   [Parameters][21]
+        -   [Examples][22]
+    -   [asmToRaw][23]
+        -   [Parameters][24]
+        -   [Examples][25]
+    -   [formatAsm][26]
+        -   [Parameters][27]
+        -   [Examples][28]
+    -   [fromRaw][29]
+        -   [Parameters][30]
+        -   [Examples][31]
+    -   [fromAsm][32]
+        -   [Parameters][33]
+        -   [Examples][34]
+    -   [fromAddress][35]
+        -   [Parameters][36]
+        -   [Examples][37]
+-   [Options][38]
+    -   [Properties][39]
+    -   [Examples][40]
+-   [opcodes][41]
+    -   [Examples][42]
+    -   [opcodeForWord][43]
+        -   [Parameters][44]
+        -   [Examples][45]
+    -   [wordForOpcode][46]
+        -   [Parameters][47]
+        -   [Examples][48]
+    -   [opcodeIsValid][49]
+        -   [Parameters][50]
+        -   [Examples][51]
+    -   [wordIsValid][52]
+        -   [Parameters][53]
+        -   [Examples][54]
+    -   [descriptionForOpcode][55]
+        -   [Parameters][56]
+        -   [Examples][57]
+    -   [descriptionForWord][58]
+        -   [Parameters][59]
+        -   [Examples][60]
+    -   [inputDescriptionForOpcode][61]
+        -   [Parameters][62]
+        -   [Examples][63]
+    -   [inputDescriptionForWord][64]
+        -   [Parameters][65]
+        -   [Examples][66]
+    -   [outputDescriptionForOpcode][67]
+        -   [Parameters][68]
+        -   [Examples][69]
+    -   [outputDescriptionForWord][70]
+        -   [Parameters][71]
+        -   [Examples][72]
+    -   [opcodeIsDisabled][73]
+        -   [Parameters][74]
+        -   [Examples][75]
+    -   [wordIsDisabled][76]
+        -   [Parameters][77]
+        -   [Examples][78]
+-   [Token][79]
+    -   [Parameters][80]
+    -   [Examples][81]
+    -   [toAsm][82]
+        -   [Parameters][83]
+        -   [Examples][84]
+    -   [toScript][85]
+        -   [Examples][86]
+    -   [toString][87]
+    -   [literal][88]
+        -   [Parameters][89]
+    -   [opcode][90]
+        -   [Parameters][91]
+    -   [placeholder][92]
+        -   [Parameters][93]
+    -   [LITERAL][94]
+    -   [OPCODE][95]
+    -   [PLACEHOLDER][96]
 
-## rawToAsm
+## BScript
 
-Convert raw bscript into a bscript asm string.
+A BScript instance represents a parsed raw bscript or parsed bscript asm string.
+
+It is likely that you will not want to call the BScript constructor directly,
+but instead use the `BScript.fromRaw`, `BScript.fromAsm` or `BScript.fromAddress`
+static methods to create a new BScript instance.
 
 ### Parameters
 
--   `rawScript` **([string][12] \| [Buffer][13])** The raw bscript
--   `encoding` **[string][12]** The [encoding][14] of `rawScript` if it is a string (optional, default `'hex'`)
+-   `tokens` **[Array][97]&lt;[Token][98]>** The ordered list of parsed tokens for the script
 
 ### Examples
+
+```javascript
+const BScript = require('bscript-parser')
+const {Token} = BScript
+const {opcodeForWord} = Bscript.opcodes
+
+const tokens = [
+  Token.opcode(opcodeForWord('OP_HASH160'), 0, 1),
+  Token.literal(Buffer.from('c664139327b98043febeab6434eba89bb196d1af', 'hex'), 1, 21),
+  Token.opcode(opcodeForWord('OP_EQUAL'), 21, 22)
+]
+
+const bscript = new BScript(tokens)
+```
+
+### tokens
+
+The script's parsed tokens.
+
+Type: [Array][97]&lt;[Token][98]>
+
+### toAsm
+
+Converts a parsed script to an asm text.
+
+#### Parameters
+
+-   `options` **[Options][99]** Options for asm stringification (optional, default `{}`)
+
+#### Examples
+
+```javascript
+const bscript = BScript.fromRaw('a914c664139327b98043febeab6434eba89bb196d1af87', 'hex')
+const asm = bscript.toAsm()
+assert.equal(asm, 'OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL')
+```
+
+Returns **[string][100]** A bscript asm string.
+
+### toRaw
+
+Converts a parsed script to raw bscript.
+
+#### Parameters
+
+-   `outputEncoding` **(null | [string][100])** The buffer [encoding][101]
+       of the returned raw bscript, or null (the default) to have a buffer returned. (optional, default `null`)
+
+#### Examples
+
+```javascript
+const bscript = BScript.fromAsm('OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL')
+const raw = bscript.toRaw('hex')
+assert.equal(raw, 'a914c664139327b98043febeab6434eba89bb196d1af87')
+```
+
+Returns **([string][100] \| [Buffer][102])** The parsed script in its raw form
+
+### toAddress
+
+Convert a BSCript object into an address.
+
+Either the `pubKeyHash`, `scriptHash`, or `bech32` option is used when
+the address is generated, depending on the type of address the script
+converts to.  See the _Bitcoin Wiki_ entry for [addresses][103]
+to learn more about these options and what they mean.  If the address is intended
+to be used on the bitcoin mainnet, you should use the default values.
+
+If the script does not represent an address, `undefined`is returned.
+
+#### Parameters
+
+-   `options` **[Options][99]** Options for address generation (optional, default `{}`)
+
+#### Examples
+
+```javascript
+const bscript = BScript.fromAsm('OP_HASH160 52973f3519d5d248004767efb874aa2a3b2b37ce OP_EQUAL')
+const address = bscript.toAddress()
+assert.equal(address, '39DiX6M1KX2MNvtm44eUu18qdgqxnJgTW8')
+```
+
+Returns **([string][100] \| [undefined][104])** The address for the script or `undefined` if the script
+   does not convert to an address
+
+### scriptType
+
+The script type of the script.
+
+Possible values are:
+
+-   p2pk
+-   p2pkh
+-   p2sh
+-   p2wpkh
+-   p2wsh
+
+If the script is not a known standard script type, `undefined` is returned.
+
+Type: ([string][100] \| [undefined][104])
+
+#### Examples
+
+```javascript
+const asm = 'OP_DUP OP_HASH160 f54a5851e9372b87810a8e60cdd2e7cfd80b6e31 OP_EQUALVERIFY OP_CHECKSIG'
+const bscript = BScript.fromAsm(asm)
+assert.equal('p2pkh', bscript.scriptType)
+```
+
+### hasAddress
+
+Whether or not the script is convertible to an address.
+
+Type: [boolean][105]
+
+#### Examples
+
+```javascript
+const asm = 'OP_0 769be9e30613eb5a67efe8ae03805079e8fd5d92'
+const bscript = BScript.fromAsm(asm)
+assert.equal(true, bscript.hasAddress)
+```
+
+```javascript
+const asm = 'OP_RETURN 636861726c6579206c6f766573206865696469'
+const bscript = BScript.fromAsm(asm)
+assert.equal(false, bscript.hasAddress)
+```
+
+### redeemScript
+
+The redeem script of a p2sh scriptSig.
+
+Type: ([BScript][106] \| [undefined][104])
+
+#### Examples
+
+```javascript
+const bscript = BScript.fromRaw('160014983c113b3b34d109e72aa6d4246e2430b3240161', 'hex')
+const redeem = bscript.redeemScript
+assert.equal(redeem.toRaw('hex'), '0014983c113b3b34d109e72aa6d4246e2430b3240161')
+```
+
+### rawToAsm
+
+Convert raw bscript into a bscript asm string.
+
+#### Parameters
+
+-   `rawScript` **([string][100] \| [Buffer][102])** The raw bscript
+-   `optionsOrEncoding` **([string][100] | null | [Options][99])** An Options object, or just the `encoding` option as a string (optional, default `{}`)
+
+#### Examples
 
 ```javascript
 const {rawToAsm} = require('bscript-parser')
@@ -31,19 +272,18 @@ const asm = rawToAsm('a914c664139327b98043febeab6434eba89bb196d1af87', 'hex')
 assert.equal(asm, 'OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL')
 ```
 
-Returns **[string][12]** The raw bscript converted to an asm string
+Returns **[string][100]** The raw bscript converted to an asm string
 
-## asmToRaw
+### asmToRaw
 
 Convert a bscript asm string into raw bscript.
 
-### Parameters
+#### Parameters
 
--   `asmScript` **[string][12]** The bscript asm string
--   `outputEncoding` **([string][12] | null)**    The [encoding][14]
-       for the return value or `null` (the default) to return as a buffer. (optional, default `null`)
+-   `asmScript` **[string][100]** The bscript asm string
+-   `optionsOrEncoding` **([string][100] | null | [Options][99])** An Options object or just the encoding option (optional, default `{}`)
 
-### Examples
+#### Examples
 
 ```javascript
 const {asmToRaw} = require('bscript-parser')
@@ -51,17 +291,18 @@ const raw = asmToRaw('OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQU
 assert.equal(raw, 'a914c664139327b98043febeab6434eba89bb196d1af87')
 ```
 
-Returns **([string][12] \| [Buffer][13])** The asm string converted to raw bscript
+Returns **([string][100] \| [Buffer][102])** The asm string converted to raw bscript
 
-## formatAsm
+### formatAsm
 
 Reformat a bscript asm string.
 
-### Parameters
+#### Parameters
 
--   `asmScript` **[string][12]** The bscript asm string
+-   `asmScript` **[string][100]** The bscript asm string
+-   `options` **[Options][99]** The options for the reformatted code (optional, default `{}`)
 
-### Examples
+#### Examples
 
 ```javascript
 const {formatAsm} = require('bscript-parser')
@@ -69,66 +310,720 @@ const formatted = formatAsm('HASH160  [c664139327b98043febeab6434eba89bb196d1af]
 assert.equal(asm, 'OP_HASH160 c664139327b98043febeab6434eba89bb196d1af OP_EQUAL')
 ```
 
-Returns **[string][12]** The reformatted asm script.
+Returns **[string][100]** The reformatted asm script.
+
+### fromRaw
+
+Create a BScript object from a raw script.
+
+#### Parameters
+
+-   `rawScript` **([string][100] \| [Buffer][102])** The raw bscript to parse into a BScript object
+-   `encoding` **[string][100]** The buffer [encoding][101]
+       of the raw script if it is a string. Defaults to 'hex'. (optional, default `'hex'`)
+
+#### Examples
+
+```javascript
+const raw = a914c664139327b98043febeab6434eba89bb196d1af87
+const bscript = BScript.fromRaw(raw, 'hex')
+assert.equal(raw, bscript.toRaw('hex'))
+```
+
+-   Throws **[TypeError][107]** When `rawScript` is not a buffer or not a properly encoded string.
+-   Throws **[Error][108]** When the script contains an invalid opcode.
+
+Returns **[BScript][106]** The parsed script object.
+
+### fromAsm
+
+Create a BScript object from an asm string.
+
+#### Parameters
+
+-   `asmScript` **[string][100]** The bscript asm string to parse into a BScript object
+-   `options` **[Options][99]** Options to be passed to the parser (optional, default `{}`)
+
+#### Examples
+
+```javascript
+const asm = 'OP_HASH160 52973f3519d5d248004767efb874aa2a3b2b37ce OP_EQUAL'
+const bscript = BScript.fromAsm(asm)
+assert.equal(asm, bscript.toAsm())
+```
+
+-   Throws **[Error][108]** When `asmScript` is not a valid asm script.
+
+Returns **[BScript][106]** The parsed script object.
+
+### fromAddress
+
+Create a BScript object from a [standard address][103].
+
+Depending on the type of address provided, one of the `pubKeyHash`,
+`scriptHash`, or `bech32` option is used when the address is parsed.
+See the _Bitcoin Wiki_ entry for [addresses][103]
+to learn more about these options and what they mean.  If the address is one for
+the bitcoin mainnet, you should use the default values.
+
+#### Parameters
+
+-   `address` **[string][100]** The address being parsed into a script object.
+-   `options` **[Options][99]** The options used for parsing the address. (optional, default `{}`)
+
+#### Examples
+
+```javascript
+[
+  '1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs',
+  '39DiX6M1KX2MNvtm44eUu18qdgqxnJgTW8',
+  'bc1qq28dxlfuvrp8666vlh73tsrspg8n68atkfqxqwfjl',
+  'bc1qqsgucp6ev42uvcw9lnhjyhkz2vhyv9ez4pg003dcerw6ds4nw7q25ssrrlcc'
+].forEach((address) => {
+  bscript = BScript.fromAddress(address)
+  assert.equal(address, bscript.toAddress())
+})
+```
+
+-   Throws **[TypeError][107]** When `address` is not a known standard address.
+
+Returns **BSCript** The parsed script object.
 
 ## Options
 
 Options shared by several of the functions provided by this module.
 
-Type: [Object][15]
+Type: [Object][109]
 
 ### Properties
 
--   `encoding` **[string][12]?**    The buffer [encoding][14]
-       of the provided raw bscript if it is a string. The default value is `'hex'`.
--   `literalStyle` **[string][12]?**    When generating asm, this setting configures the style in which `PUSH_DATA` values ar output.
+-   `encoding` **[string][100]?**    The buffer [encoding][101]
+       of the input or output raw bscript if it is a string.
+       A value of `null` will output a raw bscript as a Buffer.
+       The default value is `'hex'`.
+-   `literalStyle` **[string][100]?**    When generating asm, this setting configures the style in which `PUSH_DATA` values ar output.
        The following options are allowed:<dl>   <dt>normal</dt><dd>abcdef012345</dd>
        <dt>brackets</dt><dd>[abcdef012345]</dd>
        <dt>prefixed</dt><dd>0xabcdef012345</dd>
        <dt>verbose</dt><dd>PUSHDATA(6)[abcdef012345]</dd></dl>
--   `opcodeStyle` **[string][12]?**    When generating asm, this setting configures the style in which opcode terms are output.
+-   `opcodeStyle` **[string][100]?**    When generating asm, this setting configures the style in which opcode terms are output.
        The following options are allowed:<dl>   <dt>normal</dt><dd>OP_HASH160</dd>
        <dt>short</dt><dd>HASH160</dd></dl>
--   `terms` **[Object][15]?** An object mapping terms to opcodes.
+-   `terms` **[Object][109]?** An object mapping terms to opcodes.
        This allows terms to be overridden and for non-standard terms to be parsed.
--   `opcodes` **[Object][15]?** An object mapping opcodes to terms.
+-   `opcodes` **[Object][109]?** An object mapping opcodes to terms.
        This allows opcodes to be overriden with non-standard terms.
--   `pubKeyHash` **[number][16]?** The pub key hash prefix for generating / parsing standard [p2pkh][17] addresses.
--   `scriptHash` **[number][16]?** The script hash prefix for generating / parsing standard [p2sh][18] addresses.
--   `bech32` **[string][12]?** The prefix used for generating / parsing standard [bech32][18] addresses.
+-   `pubKeyHash` **[number][110]?** The pub key hash prefix for generating / parsing standard [p2pkh][111] addresses.
+-   `scriptHash` **[number][110]?** The script hash prefix for generating / parsing standard [p2sh][112] addresses.
+-   `bech32` **[string][100]?** The prefix used for generating / parsing standard [bech32][112] addresses.
+-   `allowPlaceHolders` **[boolean][105]?** When true, an asm script can be compiled with `<placeholder>` values. The default is `false`.
 
-[1]: #rawtoasm
+### Examples
+
+```javascript
+// These are all the default options
+const options = {
+  encoding: 'hex',
+  literalStyle: 'normal',
+  opcodeStyle: 'normal',
+  terms: {},
+  opcodes: {},
+  pubKeyHash: 0x00,
+  scriptHash: 0x05,
+  bech32: 'bc',
+  allowPlaceHolders: false
+}
+```
+
+## opcodes
+
+### Examples
+
+```javascript
+const {opcodes} = require('bscript-parser')
+```
+
+### opcodeForWord
+
+Get the opcode of an opcode string
+
+#### Parameters
+
+-   `word` **[string][100]** The opcode string.
+
+#### Examples
+
+```javascript
+assert.equal(135, opcodes.opcodeForWord('OP_EQUAL'))
+```
+
+-   Throws **any** AssertError When the word is not a valid opcode string.
+
+Returns **[number][110]** The opcode for the word
+
+### wordForOpcode
+
+Get the opcode string of an opcode
+
+#### Parameters
+
+-   `opcode` **[number][110]** 
+
+#### Examples
+
+```javascript
+assert.equal('OP_EQUAL', opcodes.wordForOpcode(135))
+```
+
+-   Throws **any** AssertionError When the opcode is not a valid opcode.
+
+Returns **[string][100]** The opcode string for the opcode
+
+### opcodeIsValid
+
+Determines whether an opcode is valid
+
+#### Parameters
+
+-   `opcode` **[number][110]** 
+
+#### Examples
+
+```javascript
+assert.equal(true, opcodes.opcodeIsValid(135))
+assert.equal(false, opcodes.opcodeIsValid(1000))
+```
+
+Returns **[boolean][105]** `true` if the opcode is valid, `false` if not.
+
+### wordIsValid
+
+Determines whether an opcode string is valid
+
+#### Parameters
+
+-   `word` **[string][100]** 
+
+#### Examples
+
+```javascript
+assert.equal(true, opcodes.wordIsValid('OP_EQUAL'))
+assert.equal(false, opcodes.wordIsValid('OP_BAD'))
+```
+
+Returns **[boolean][105]** `true` if the word is valid, `false` if not.
+
+### descriptionForOpcode
+
+Gets a description for an opcode
+
+#### Parameters
+
+-   `opcode` **[number][110]** 
+
+#### Examples
+
+```javascript
+const expected = 'Returns 1 if the inputs are exactly equal, 0 otherwise.'
+assert.equal(expected, opcodes.descriptionForOpcode(135))
+```
+
+-   Throws **any** AssertionError When opcode is invalid.
+
+Returns **[string][100]** The description of the opcode
+
+### descriptionForWord
+
+Gets a description for an opcode string
+
+#### Parameters
+
+-   `word` **[string][100]** 
+
+#### Examples
+
+```javascript
+const expected = 'Returns 1 if the inputs are exactly equal, 0 otherwise.'
+assert.equal(expected, opcodes.descriptionForWord('OP_EQUAL'))
+```
+
+-   Throws **any** AssertionError When word is invalid.
+
+Returns **[string][100]** The description of the opcode
+
+### inputDescriptionForOpcode
+
+Gets a description of the input for an opcode
+
+#### Parameters
+
+-   `opcode` **[number][110]** 
+
+#### Examples
+
+```javascript
+const expected = 'x1 x2'
+assert.equal(expected, opcodes.inputDescriptionForOpcode(135))
+```
+
+-   Throws **any** AssertionError When opcode is invalid.
+
+Returns **[string][100]** The description of the opcode's input
+
+### inputDescriptionForWord
+
+Gets a description of the input for an opcode string
+
+#### Parameters
+
+-   `word` **[string][100]** 
+
+#### Examples
+
+```javascript
+const expected = 'x1 x2'
+assert.equal(expected, opcodes.inputDescriptionForWord('OP_EQUAL'))
+```
+
+-   Throws **any** AssertionError When word is invalid.
+
+Returns **[string][100]** The description of the opcode's input
+
+### outputDescriptionForOpcode
+
+Gets a description of the output for an opcode
+
+#### Parameters
+
+-   `opcode` **[number][110]** 
+
+#### Examples
+
+```javascript
+const expected = 'True / false'
+assert.equal(expected, opcodes.outputDescriptionForOpcode(135))
+```
+
+-   Throws **any** AssertionError When opcode is invalid.
+
+Returns **[string][100]** The description of the opcode's output
+
+### outputDescriptionForWord
+
+Gets a description of the output for an opcode string
+
+#### Parameters
+
+-   `word` **[string][100]** 
+
+#### Examples
+
+```javascript
+const expected = 'True / false'
+assert.equal(expected, opcodes.outputDescriptionForWord('OP_EQUAL'))
+```
+
+-   Throws **any** AssertionError When word is invalid.
+
+Returns **[string][100]** The description of the opcode's output
+
+### opcodeIsDisabled
+
+Gets whether or not an opcode is disabled in bitcoin-core
+
+#### Parameters
+
+-   `opcode` **[number][110]** 
+
+#### Examples
+
+```javascript
+assert.equal(false, opcodes.opcodeIsDisabled(135))
+assert.equal(true, opcodes.opcodeIsDisabled(134))
+```
+
+-   Throws **any** AssertionError When opcode is invalid.
+
+Returns **[boolean][105]** `true` if the opcode is disabled, `false` if not
+
+### wordIsDisabled
+
+Gets whether or not an opcode string is disabled in bitcoin-core
+
+#### Parameters
+
+-   `word` **[string][100]** 
+
+#### Examples
+
+```javascript
+assert.equal(false, opcodes.opcodeIsDisabled('OP_EQUAL'))
+assert.equal(true, opcodes.opcodeIsDisabled('OP_XOR'))
+```
+
+-   Throws **any** AssertionError When word is invalid.
+
+Returns **[boolean][105]** `true` if the opcode is disabled, `false` if not
+
+## Token
+
+A Token represents a parsed part of a bscript.
+
+There are three types of tokens:
+
+-   A literal (PUSH_DATA data)
+-   An opcode
+-   A placeholder (for template scripts only)
+
+### Parameters
+
+-   `type` **[string][100]** One of `Token.LITERAL`, `Token.OPCODE`, or `Token.PLACEHOLDER`
+-   `value` **([Buffer][102] \| [number][110] \| [string][100])** The value of the token.
+       For a literal, this is the raw pushed data as a Buffer (without the push data opcode).
+       For an opcode, this is the opcode as an integer.
+       For a placeholder, it is  the placeholder string.
+-   `startIndex` **[number][110]** The position within the asm text or raw script where the
+       token beings. Note: if source of the script is a raw script that is string encoded,
+       the startIndex is the index within the buffer, not the original encoded string.
+-   `endIndex` **[number][110]** The position within the asm text or raw script where the
+       token ends. Note: if source of the script is a raw script that is string encoded,
+       the endIndex is the index within the buffer, not the original encoded string.
+
+### Examples
+
+```javascript
+const {Token} = require('bscript-parser')
+token = new Token(Token.LITERAL, Buffer.from('abcdef0123', 'hex'), 0, 10)
+```
+
+### toAsm
+
+Convert a token into an asm string.
+
+#### Parameters
+
+-   `options` **[Options][99]** Options for asm stringification.
+       The `literalStyle`, and `opcodeStyle` parameters are relevant to this method. (optional, default `{}`)
+
+#### Examples
+
+```javascript
+const token = Token.literal(Buffer.from('c664139327b98043febeab6434eba89bb196d1af', 'hex'))
+const asm = token.toAsm({literalStyle: 'verbose'})
+assert.equal('PUSH_DATA(20)[c664139327b98043febeab6434eba89bb196d1af]', asm)
+```
+
+```javascript
+const token = Token.opcode(0xa9)
+const asm = token.toAsm({opcodeStyle: 'short'})
+assert.equal('HASH160', asm)
+```
+
+Returns **[string][100]** The token's asm representation.
+
+### toScript
+
+Convert a token into its raw script representation.
+
+#### Examples
+
+```javascript
+const data = Buffer.from('c664139327b98043febeab6434eba89bb196d1af', 'hex')
+const expected = Buffer.from('14c664139327b98043febeab6434eba89bb196d1af', 'hex')
+const token = Token.literal(data)
+const raw = token.toScript()
+assert.equal(0, expected.compare(raw))
+```
+
+```javascript
+const token = Token.opcode(0xa9)
+const expexted = Buffer.from([0xa9])
+const raw = token.toScript()
+assert.equal(0, expected.compare(raw))
+```
+
+Returns **[Buffer][102]** The token's raw bscript representation.
+
+### toString
+
+Convert to an asm string.
+
+Returns **[string][100]** 
+
+### literal
+
+A short-hand helper to create a `Token.LITERAL` token.
+
+#### Parameters
+
+-   `value` **[Buffer][102]** The push data value. See the parameters for [Token][79].
+-   `startIndex` **[number][110]** See the parameters for [Token][79]
+-   `endIndex` **[number][110]** See the parameters for [Token][79]
+
+Returns **[Token][98]** 
+
+### opcode
+
+A short-hand helper to create a `Token.OPCODE` token.
+
+#### Parameters
+
+-   `value` **integer** The opcode value. See the parameters for [Token][79].
+-   `startIndex` **[number][110]** See the parameters for [Token][79]
+-   `endIndex` **[number][110]** See the parameters for [Token][79]
+
+Returns **[Token][98]** 
+
+### placeholder
+
+A short-hand helper to create a `Token.PLACEHOLDER` token.
+
+#### Parameters
+
+-   `value` **[string][100]** The placeholder string. See the parameters for [Token][79].
+-   `startIndex` **[number][110]** See the parameters for [Token][79]
+-   `endIndex` **[number][110]** See the parameters for [Token][79]
+
+Returns **[Token][98]** 
+
+### LITERAL
+
+Constant for the `type` property of a literal token.
+
+Type: [string][100]
+
+### OPCODE
+
+Constant for the `type` property of an opcode token.
+
+Type: [string][100]
+
+### PLACEHOLDER
+
+Constant for the `type` property of a placeholder token.
+
+Type: [string][100]
+
+[1]: #bscript
 
 [2]: #parameters
 
 [3]: #examples
 
-[4]: #asmtoraw
+[4]: #tokens
 
-[5]: #parameters-1
+[5]: #toasm
 
-[6]: #examples-1
+[6]: #parameters-1
 
-[7]: #formatasm
+[7]: #examples-1
 
-[8]: #parameters-2
+[8]: #toraw
 
-[9]: #examples-2
+[9]: #parameters-2
 
-[10]: #options
+[10]: #examples-2
 
-[11]: #properties
+[11]: #toaddress
 
-[12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[12]: #parameters-3
 
-[13]: https://nodejs.org/api/buffer.html
+[13]: #examples-3
 
-[14]: https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings
+[14]: #scripttype
 
-[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[15]: #examples-4
 
-[16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[16]: #hasaddress
 
-[17]: https://en.bitcoin.it/wiki/Transaction#Pay-to-PubkeyHash
+[17]: #examples-5
 
-[18]: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
+[18]: #redeemscript
+
+[19]: #examples-6
+
+[20]: #rawtoasm
+
+[21]: #parameters-4
+
+[22]: #examples-7
+
+[23]: #asmtoraw
+
+[24]: #parameters-5
+
+[25]: #examples-8
+
+[26]: #formatasm
+
+[27]: #parameters-6
+
+[28]: #examples-9
+
+[29]: #fromraw
+
+[30]: #parameters-7
+
+[31]: #examples-10
+
+[32]: #fromasm
+
+[33]: #parameters-8
+
+[34]: #examples-11
+
+[35]: #fromaddress
+
+[36]: #parameters-9
+
+[37]: #examples-12
+
+[38]: #options
+
+[39]: #properties
+
+[40]: #examples-13
+
+[41]: #opcodes
+
+[42]: #examples-14
+
+[43]: #opcodeforword
+
+[44]: #parameters-10
+
+[45]: #examples-15
+
+[46]: #wordforopcode
+
+[47]: #parameters-11
+
+[48]: #examples-16
+
+[49]: #opcodeisvalid
+
+[50]: #parameters-12
+
+[51]: #examples-17
+
+[52]: #wordisvalid
+
+[53]: #parameters-13
+
+[54]: #examples-18
+
+[55]: #descriptionforopcode
+
+[56]: #parameters-14
+
+[57]: #examples-19
+
+[58]: #descriptionforword
+
+[59]: #parameters-15
+
+[60]: #examples-20
+
+[61]: #inputdescriptionforopcode
+
+[62]: #parameters-16
+
+[63]: #examples-21
+
+[64]: #inputdescriptionforword
+
+[65]: #parameters-17
+
+[66]: #examples-22
+
+[67]: #outputdescriptionforopcode
+
+[68]: #parameters-18
+
+[69]: #examples-23
+
+[70]: #outputdescriptionforword
+
+[71]: #parameters-19
+
+[72]: #examples-24
+
+[73]: #opcodeisdisabled
+
+[74]: #parameters-20
+
+[75]: #examples-25
+
+[76]: #wordisdisabled
+
+[77]: #parameters-21
+
+[78]: #examples-26
+
+[79]: #token
+
+[80]: #parameters-22
+
+[81]: #examples-27
+
+[82]: #toasm-1
+
+[83]: #parameters-23
+
+[84]: #examples-28
+
+[85]: #toscript
+
+[86]: #examples-29
+
+[87]: #tostring
+
+[88]: #literal
+
+[89]: #parameters-24
+
+[90]: #opcode
+
+[91]: #parameters-25
+
+[92]: #placeholder
+
+[93]: #parameters-26
+
+[94]: #literal-1
+
+[95]: #opcode-1
+
+[96]: #placeholder-1
+
+[97]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[98]: #token
+
+[99]: #options
+
+[100]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[101]: https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings
+
+[102]: https://nodejs.org/api/buffer.html
+
+[103]: https://en.bitcoin.it/wiki/Address
+
+[104]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
+
+[105]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[106]: #bscript
+
+[107]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/TypeError
+
+[108]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
+
+[109]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[110]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[111]: https://en.bitcoin.it/wiki/Transaction#Pay-to-PubkeyHash
+
+[112]: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki

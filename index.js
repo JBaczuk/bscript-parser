@@ -7,6 +7,7 @@ const BScript = require('./src/bscript')
 /**
  * Convert raw bscript into a bscript asm string.
  *
+ * @static
  * @param {string|Buffer} rawScript - The raw bscript
  * @param {string|null|Options} [optionsOrEncoding={}] - An Options object, or just the `encoding` option as a string
  * @return {string} The raw bscript converted to an asm string
@@ -151,6 +152,21 @@ BScript.Token = Token
  * @property {number} [pubKeyHash=0x00] - The pub key hash prefix for generating / parsing standard [p2pkh](https://en.bitcoin.it/wiki/Transaction#Pay-to-PubkeyHash) addresses.
  * @property {number} [scriptHash=0x05] - The script hash prefix for generating / parsing standard [p2sh](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) addresses.
  * @property {string} [bech32='bc'] - The prefix used for generating / parsing standard [bech32](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) addresses.
+ * @property {boolean} [allowPlaceHolders=false] - When true, an asm script can be compiled with `<placeholder>` values. The default is `false`.
+ *
+ * @example
+ * // These are all the default options
+ * const options = {
+ *   encoding: 'hex',
+ *   literalStyle: 'normal',
+ *   opcodeStyle: 'normal',
+ *   terms: {},
+ *   opcodes: {},
+ *   pubKeyHash: 0x00,
+ *   scriptHash: 0x05,
+ *   bech32: 'bc',
+ *   allowPlaceHolders: false
+ * }
  */
 
 module.exports = BScript

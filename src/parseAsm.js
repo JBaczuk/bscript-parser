@@ -88,7 +88,7 @@ function nextOp (chars, idx, options) {
     return parseDataLiteral(chars, idx, END_TERM)
   }
 
-  throw new Error(`Unexpected character at posotion ${idx}`)
+  throw new Error(`Unexpected character at position ${idx}`)
 }
 
 function parseDataLiteral (chars, idx, terminator, start = idx) {
