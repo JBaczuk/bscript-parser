@@ -1,6 +1,7 @@
 const deprecate = require('depd')('bscript-parser')
 
 const opcodes = require('./src/opcodes')
+const Token = require('./src/token')
 const BScript = require('./src/bscript')
 
 BScript.rawToAsm = function (rawScript, optionsOrEncoding = {}) {
@@ -48,5 +49,6 @@ BScript.parseAsmScript = deprecate.function(
 )
 
 BScript.opcodes = opcodes
+BScript.Token = Token
 
 module.exports = BScript
