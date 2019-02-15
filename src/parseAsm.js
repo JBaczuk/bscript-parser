@@ -19,7 +19,7 @@ const R_ANGLE_BRACKET = '>'
 const L_PAREN = '('
 const R_PAREN = ')'
 const ZERO = '0'
-const WS = new Set(' \t\n\v')
+const WS = new Set(' \t\n\v\f\r')
 // const QUOTES = new Set('"\'')
 const X = new Set('x', 'X')
 const END_DATA_LITERAL = new Set(R_SQUARE_BRACKET)
@@ -68,7 +68,7 @@ function nextOp (chars, idx, options) {
       return parseDataLiteral(chars, idx + 2, END_TERM, idx)
     } else if (nextChar === undefined || WS.has(nextChar)) {
       // literal nulldata (OP_0)
-      return [opcode(0, idx), idx + 1]
+      return [opcode(0, idx, idx + 1), idx + 1]
     } else {
       // hex literal
       return parseDataLiteral(chars, idx, END_TERM)
@@ -114,12 +114,14 @@ function parseDataLiteral (chars, idx, terminator, start = idx) {
     throw new Error(`Unterminated literal starting at position ${start}`)
   }
 
-  // remove trailing `]` or whitespace
-  idx += 1
+  // remove trailing `]` (or other non-whitespace terminator)
+  if (typeof first !== 'undefined' && !WS.has(first)) {
+    idx += 1
+  }
 
   const data = Buffer.from(hex.join(''), 'hex')
 
-  return [literal(data, start), idx]
+  return [literal(data, start, idx), idx]
 }
 
 function parsePlaceHolder (chars, idx, terminator, start = idx) {
@@ -213,7 +215,7 @@ function parseTerm (chars, idx, options) {
   }
 
   const op = opcodeForWord(term)
-  return [opcode(op, start), idx]
+  return [opcode(op, start, idx), idx]
 }
 
 function peek (arr, idx, skip = 0) {
