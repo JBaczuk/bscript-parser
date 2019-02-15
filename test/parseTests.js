@@ -20,6 +20,22 @@ describe('Parse Tests', function () {
     })
   })
 
+  describe('rawToAddress Tests', function () {
+    conversions.forEach(function (conversion) {
+      describe(conversion.name, function () {
+        it('returns the expected address', function () {
+          let address
+          if (conversion.opts) {
+            address = script.rawToAddress(conversion.raw, conversion.opts)
+          } else {
+            address = script.rawToAddress(conversion.raw)
+          }
+          expect(address).to.equal(conversion.address)
+        })
+      })
+    })
+  })
+
   describe('asmToRaw Tests', function () {
     conversions.forEach(function (conversion) {
       describe(conversion.name, function () {
@@ -33,6 +49,58 @@ describe('Parse Tests', function () {
           expect(parsedScript).to.equal(conversion.raw)
         })
       })
+    })
+  })
+
+  describe('asmToAddress Tests', function () {
+    conversions.forEach(function (conversion) {
+      describe(conversion.name, function () {
+        it('returns the expected address', function () {
+          let address
+          if (conversion.opts) {
+            address = script.asmToAddress(conversion.asm, conversion.opts)
+          } else {
+            address = script.asmToAddress(conversion.asm)
+          }
+          expect(address).to.equal(conversion.address)
+        })
+      })
+    })
+  })
+
+  describe('addressToRaw Tests', function () {
+    conversions.forEach(function (conversion) {
+      if (conversion.address) {
+        describe(conversion.name, function () {
+          it('returns the expected raw script', function () {
+            let parsedScript
+            if (conversion.opts) {
+              parsedScript = script.addressToRaw(conversion.address, conversion.opts)
+            } else {
+              parsedScript = script.addressToRaw(conversion.address, 'hex')
+            }
+            expect(parsedScript).to.equal(conversion.raw)
+          })
+        })
+      }
+    })
+  })
+
+  describe('addressToAsm Tests', function () {
+    conversions.forEach(function (conversion) {
+      if (conversion.address) {
+        describe(conversion.name, function () {
+          it('returns the expected asm script', function () {
+            let parsedScript
+            if (conversion.opts) {
+              parsedScript = script.addressToAsm(conversion.address, conversion.opts)
+            } else {
+              parsedScript = script.addressToAsm(conversion.address)
+            }
+            expect(parsedScript).to.equal(conversion.asm)
+          })
+        })
+      }
     })
   })
 
@@ -68,8 +136,12 @@ describe('Parse Tests', function () {
       if (conversion.address) {
         describe(conversion.address, function () {
           it('calculates the correct script for an address', function () {
+            let encoding = 'hex'
+            if (conversion.opts && conversion.opts.encoding) {
+              encoding = conversion.opts.encoding
+            }
             const parsed = script.fromAddress(conversion.address)
-            expect(parsed.toRaw('hex')).to.equal(conversion.raw)
+            expect(parsed.toRaw(encoding)).to.equal(conversion.raw)
           })
         })
       }
@@ -80,7 +152,11 @@ describe('Parse Tests', function () {
       if (conversion.address) {
         describe(conversion.address, function () {
           it('converts the script to the correct address', function () {
-            const parsed = script.fromRaw(conversion.raw)
+            let encoding = 'hex'
+            if (conversion.opts && conversion.opts.encoding) {
+              encoding = conversion.opts.encoding
+            }
+            const parsed = script.fromRaw(conversion.raw, encoding)
             expect(parsed.hasAddress).to.equal(true)
             expect(parsed.toAddress()).to.equal(conversion.address)
           })

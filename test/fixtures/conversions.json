@@ -61,7 +61,8 @@
     "raw": "qRTGZBOTJ7mAQ/6+q2Q066ibsZbRr4c=",
     "opts": {
       "encoding": "base64"
-    }
+    },
+    "address": "3Kn1bxgQwwqfCQCLtfErFFdqQLydN5t8ez"
   },
   {
     "name": "P2SH scriptPubkey alt asm 1",
