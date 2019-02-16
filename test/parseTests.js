@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const script = require('../index.js')
 const conversions = require('./fixtures/conversions.json')
 const Token = require('../src/token.js')
+const redeem = require('./fixtures/redeem.json')
 
 describe('Parse Tests', function () {
   describe('rawToAsm Tests', function () {
@@ -58,6 +59,22 @@ describe('Parse Tests', function () {
         it('determines the correct script type', function () {
           const parsed = script.fromRaw(conversion.raw, 'hex')
           expect(parsed.scriptType).to.equal(conversion.scriptType)
+        })
+      })
+    })
+  })
+  describe('redeem', function () {
+    redeem.forEach(function (conversion, idx) {
+      describe(conversion.name || `redeem ${idx}`, function () {
+        it('returns the expected redeem', function () {
+          const parsedScript = script.fromRaw(conversion.raw)
+          if (conversion.valid) {
+            const redeemScript = parsedScript.redeemScript
+            expect(typeof redeemScript).to.equal('object')
+            expect(redeemScript.toRaw('hex')).to.equal(conversion.redeem)
+          } else {
+            expect(conversion.redeemScript).to.equal(undefined)
+          }
         })
       })
     })
