@@ -1,5 +1,7 @@
 # Node Bitcoin Script
-[![NPM](https://img.shields.io/npm/v/bscript-parser.svg)](https://www.npmjs.org/package/bscript-parser)  
+[![NPM](https://img.shields.io/npm/v/bscript-parser.svg)](https://www.npmjs.org/package/bscript-parser)
+[![Build Status](https://travis-ci.com/JBaczuk/bscript-parser.svg?branch=master)](https://travis-ci.com/JBaczuk/bscript-parser)
+
 Node Bitcoin script parser
 
 ## Installation
