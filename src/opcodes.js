@@ -6,7 +6,7 @@ const wordInfoMap = require('../data/word_info_map')
 function opcodeForWord (word) {
   assert(wordIsValid(word), `${word} is not a valid term`)
   const info = wordInfoMap[word]
-  const idx = info.words.indexOf(word)
+  const idx = info.opcodes.length === 1 ? 0 : info.words.indexOf(word)
   return info.opcodes[idx]
 }
 
@@ -19,7 +19,7 @@ function wordForOpcode (opcode) {
     return undefined
   }
 
-  const idx = info.opcodes.indexOf(opcode)
+  const idx = info.words.length === 1 ? 0 : info.opcodes.indexOf(opcode)
   return info.words[idx]
 }
 
