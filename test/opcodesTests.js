@@ -4,6 +4,7 @@ const expect = require('chai').expect
 const {
   opcodeForWord,
   wordForOpcode,
+  stringForOpcode,
   opcodeIsValid,
   wordIsValid,
   descriptionForOpcode,
@@ -45,6 +46,22 @@ describe('opcodes', function () {
     it('results in undefined for pushdata opcodes', function () {
       expect(wordForOpcode(1)).to.equal(undefined)
       expect(wordForOpcode(73)).to.equal(undefined)
+    })
+  })
+
+  describe('.stringForOpcode', function () {
+    it('gets the associated term for an opcode', function () {
+      expect(stringForOpcode(79)).to.equal('OP_1NEGATE')
+      expect(stringForOpcode(95)).to.equal('OP_15')
+      expect(stringForOpcode(0)).to.equal('OP_0')
+    })
+    it('throws if the opcode does not exist', function () {
+      expect(() => stringForOpcode(257)).to.throw('257 is not a valid opcode')
+      expect(() => stringForOpcode(-1)).to.throw('-1 is not a valid opcode')
+    })
+    it('formats a string for pushdata opcodes', function () {
+      expect(stringForOpcode(1)).to.equal('PUSH_DATA(1)')
+      expect(stringForOpcode(73)).to.equal('PUSH_DATA(73)')
     })
   })
 

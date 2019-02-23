@@ -38,7 +38,7 @@ function wordForOpcode (opcode) {
   const info = opcodeInfoMap[opcode]
 
   if (info.word === 'N/A') {
-    // special case... not sure what should be returned
+    // special case... return undefined
     return undefined
   }
 
@@ -47,6 +47,30 @@ function wordForOpcode (opcode) {
 }
 
 /**
+ * Gets a string representation of an opcode
+ *
+ * @memberof opcodes
+ * @param {number} opcode
+ * @return {string} The string for the opcode
+ * @example
+ * assert.equal('OP_EQUAL', opcodes.wordForOpcode(135))
+ * assert.equal('PUSH_DATA(3)', opcodes.wordForOpcode(3))
+ * @throws AssertionError When the opcode is not a valid opcode.
+ */
+function stringForOpcode (opcode) {
+  assert(opcodeIsValid(opcode), `${opcode} is not a valid opcode`)
+  const info = opcodeInfoMap[opcode]
+
+  if (info.word === 'N/A') {
+    // special case...
+    return `PUSH_DATA(${opcode})`
+  }
+
+  const idx = info.opcodes.indexOf(opcode)
+  return info.words[idx]
+}
+
+/*
  * Determines whether an opcode is valid
  *
  * @memberof opcodes
@@ -226,6 +250,7 @@ function wordIsDisabled (word) {
 module.exports = {
   opcodeForWord,
   wordForOpcode,
+  stringForOpcode,
   opcodeIsValid,
   wordIsValid,
   descriptionForOpcode,
