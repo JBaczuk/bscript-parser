@@ -28,9 +28,32 @@ const {
  */
 class Token {
   constructor (type, value, startIndex, endIndex) {
+    /**
+     * The token's type
+     *
+     * @type {string}
+     */
     this.type = type
+
+    /**
+     * The token's value
+     *
+     * @type {Buffer|number|string}
+     */
     this.value = value
+
+    /**
+     * The token's start position in the source script (if applicable)
+     *
+     * @type {number}
+     */
     this.startIndex = startIndex
+
+    /**
+     * The token's end position in the source script (if applicable)
+     *
+     * @type {number}
+     */
     this.endIndex = endIndex
   }
 
