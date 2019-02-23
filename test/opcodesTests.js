@@ -21,6 +21,7 @@ describe('opcodes', function () {
     it('gets the associated opcode for a term', function () {
       expect(opcodeForWord('OP_1NEGATE')).to.equal(79)
       expect(opcodeForWord('OP_15')).to.equal(95)
+      expect(opcodeForWord('OP_FALSE')).to.equal(0)
     })
     it('throws if the word is invalid', function () {
       expect(() => opcodeForWord('OP_CLONE')).to.throw('OP_CLONE is not a valid term')
