@@ -18,6 +18,20 @@ BScript.rawToAsm = function (rawScript, optionsOrEncoding = {}) {
   return BScript.fromRaw(rawScript, encoding).toAsm(options)
 }
 
+BScript.rawToAddress = function (rawScript, optionsOrEncoding = {}) {
+  let options = optionsOrEncoding
+
+  if (typeof options === 'string') {
+    options = { encoding: options }
+  }
+
+  const {
+    encoding = 'hex'
+  } = options
+
+  return BScript.fromRaw(rawScript, encoding).toAddress(options)
+}
+
 BScript.asmToRaw = function (asmScript, optionsOrEncoding = {}) {
   let options = optionsOrEncoding
 
@@ -30,6 +44,28 @@ BScript.asmToRaw = function (asmScript, optionsOrEncoding = {}) {
   } = options
 
   return BScript.fromAsm(asmScript, options).toRaw(encoding)
+}
+
+BScript.asmToAddress = function (asmScript, options = {}) {
+  return BScript.fromAsm(asmScript, options).toAddress(options)
+}
+
+BScript.addressToRaw = function (address, optionsOrEncoding = {}) {
+  let options = optionsOrEncoding
+
+  if (options == null || typeof options === 'string') {
+    options = { encoding: options }
+  }
+
+  const {
+    encoding = 'hex'
+  } = options
+
+  return BScript.fromAddress(address, options).toRaw(encoding)
+}
+
+BScript.addressToAsm = function (address, options = {}) {
+  return BScript.fromAddress(address, options).toAsm(options)
 }
 
 BScript.formatAsm = function (asmScript, options = {}) {
