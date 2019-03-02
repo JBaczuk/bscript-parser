@@ -19,6 +19,18 @@ describe('Parse Tests', function () {
         })
       })
     })
+
+    it('errors if an invalid encoding is passed', function () {
+      expect(() => script.rawToAsm(conversions[0].raw, { encoding: 'badencoding' })).to.throw(TypeError)
+    })
+
+    it('errors if an invalid literalStyle is passed', function () {
+      expect(() => script.rawToAsm(conversions[0].raw, { literalStyle: 'badstyle' })).to.throw(TypeError)
+    })
+
+    it('errors if an invalid opcodeStyle is passed', function () {
+      expect(() => script.rawToAsm(conversions[0].raw, { opcodeStyle: 'badstyle' })).to.throw(TypeError)
+    })
   })
 
   describe('rawToAddress Tests', function () {
@@ -35,6 +47,10 @@ describe('Parse Tests', function () {
         })
       })
     })
+
+    it('errors if an invalid encoding is passed', function () {
+      expect(() => script.rawToAddress(conversions[0].raw, { encoding: 'badencoding' })).to.throw(TypeError)
+    })
   })
 
   describe('asmToRaw Tests', function () {
@@ -50,6 +66,10 @@ describe('Parse Tests', function () {
           expect(parsedScript).to.equal(conversion.raw)
         })
       })
+    })
+
+    it('errors if an invalid encoding is passed', function () {
+      expect(() => script.asmToRaw(conversions[0].asm, { encoding: 'badencoding' })).to.throw(TypeError)
     })
   })
 
@@ -85,6 +105,10 @@ describe('Parse Tests', function () {
         })
       }
     })
+
+    it('errors if an invalid encoding is passed', function () {
+      expect(() => script.addressToRaw(conversions[1].address, { encoding: 'badencoding' })).to.throw(TypeError)
+    })
   })
 
   describe('addressToAsm Tests', function () {
@@ -103,6 +127,14 @@ describe('Parse Tests', function () {
         })
       }
     })
+
+    it('errors if an invalid literalStyle is passed', function () {
+      expect(() => script.addressToAsm(conversions[1].address, { literalStyle: 'badstyle' })).to.throw(TypeError)
+    })
+
+    it('errors if an invalid opcodeStyle is passed', function () {
+      expect(() => script.addressToAsm(conversions[1].address, { opcodeStyle: 'badstyle' })).to.throw(TypeError)
+    })
   })
 
   describe('formatAsm Tests', function () {
@@ -118,6 +150,14 @@ describe('Parse Tests', function () {
           expect(parsedScript).to.equal(conversion.asm)
         })
       })
+    })
+
+    it('errors if an invalid literalStyle is passed', function () {
+      expect(() => script.formatAsm(conversions[1].address, { literalStyle: 'badstyle' })).to.throw(TypeError)
+    })
+
+    it('errors if an invalid opcodeStyle is passed', function () {
+      expect(() => script.formatAsm(conversions[1].address, { opcodeStyle: 'badstyle' })).to.throw(TypeError)
     })
   })
 

@@ -2,6 +2,7 @@ const bs58check = require('bs58check')
 const bech32lib = require('bech32')
 
 const Token = require('./token')
+const Options = require('./options')
 
 const parseScript = require('./parseScript')
 const parseAsm = require('./parseAsm')
@@ -24,10 +25,6 @@ const ADDRESS_SCRIPT_TYPES = [
   'p2wsh',
   'p2wpkh'
 ]
-
-const PUBKEY_HASH = 0x00
-const SCRIPT_HASH = 0x05
-const BECH32 = 'bc'
 
 /**
  * A BScript instance represents a parsed raw bscript or parsed bscript asm string.
@@ -72,6 +69,7 @@ class BScript {
    */
   toAsm (options = {}) {
     // convert to assembly
+    options = Options(options)
     return this.tokens.map((token) => token.toAsm(options)).join(' ')
   }
 
@@ -89,6 +87,7 @@ class BScript {
   toRaw (outputEncoding = null) {
     // convert to raw script
     const script = Buffer.concat(this.tokens.map((token) => token.toScript()))
+    outputEncoding = Options.validateEncoding(outputEncoding)
 
     switch (outputEncoding) {
       case null:
@@ -126,17 +125,19 @@ class BScript {
       return undefined
     }
 
+    options = Options(options)
+
     switch (scriptType) {
       case 'p2pkh': {
         const {
-          pubKeyHash = PUBKEY_HASH
+          pubKeyHash
         } = options
 
         return bs58check.encode(Buffer.concat([byteToBuffer(pubKeyHash), this.tokens[2].value]))
       }
       case 'p2sh': {
         const {
-          scriptHash = SCRIPT_HASH
+          scriptHash
         } = options
 
         return bs58check.encode(Buffer.concat([byteToBuffer(scriptHash), this.tokens[1].value]))
@@ -144,7 +145,7 @@ class BScript {
       case 'p2wsh':
       case 'p2wpkh': {
         const {
-          bech32 = BECH32
+          bech32
         } = options
 
         return bech32lib.encode(bech32, bech32lib.toWords(this.toRaw()))
@@ -167,6 +168,7 @@ class BScript {
    * assert.equal(raw, bscript.toRaw('hex'))
    */
   static fromRaw (rawScript, encoding = 'hex') {
+    encoding = Options.validateEncoding(encoding)
     if (typeof rawScript === 'string') {
       rawScript = Buffer.from(rawScript, encoding)
     }
@@ -195,6 +197,8 @@ class BScript {
     if (typeof asmScript !== 'string') {
       throw new TypeError('Assembly must be a string')
     }
+
+    options = Options(options)
 
     const tokens = parseAsm(asmScript, options)
     return new BScript(tokens)
@@ -225,10 +229,12 @@ class BScript {
    * })
    */
   static fromAddress (address, options = {}) {
+    options = Options(options)
+
     const {
-      pubKeyHash = PUBKEY_HASH,
-      scriptHash = SCRIPT_HASH,
-      bech32 = BECH32
+      pubKeyHash,
+      scriptHash,
+      bech32
     } = options
 
     if (address.startsWith(bech32)) {
