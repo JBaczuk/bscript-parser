@@ -24,13 +24,16 @@ function opcodeForWord (word) {
  * Get the opcode string of an opcode
  *
  * @memberof opcodes
- * @param {number} opcode
+ * @param {number|string} opcode as an integer or numeric string
  * @return {string} The opcode string for the opcode
  * @example
  * assert.equal('OP_EQUAL', opcodes.wordForOpcode(135))
  * @throws AssertionError When the opcode is not a valid opcode.
  */
 function wordForOpcode (opcode) {
+  if (typeof opcode === 'string' && !isNaN(opcode)) {
+    opcode = parseInt(opcode)
+  }
   assert(opcodeIsValid(opcode), `${opcode} is not a valid opcode`)
   const info = opcodeInfoMap[opcode]
 
@@ -47,13 +50,16 @@ function wordForOpcode (opcode) {
  * Determines whether an opcode is valid
  *
  * @memberof opcodes
- * @param {number} opcode
+ * @param {number|string} opcode as an integer or numeric string
  * @return {boolean} `true` if the opcode is valid, `false` if not.
  * @example
  * assert.equal(true, opcodes.opcodeIsValid(135))
  * assert.equal(false, opcodes.opcodeIsValid(1000))
  */
 function opcodeIsValid (opcode) {
+  if (typeof opcode === 'string' && !isNaN(opcode)) {
+    opcode = parseInt(opcode)
+  }
   return opcodeInfoMap.hasOwnProperty(opcode)
 }
 
@@ -75,7 +81,7 @@ function wordIsValid (word) {
  * Gets a description for an opcode
  *
  * @memberof opcodes
- * @param {number} opcode
+ * @param {number|string} opcode as an integer or numeric string
  * @return {string} The description of the opcode
  * @throws AssertionError When opcode is invalid.
  * @example
@@ -83,6 +89,9 @@ function wordIsValid (word) {
  * assert.equal(expected, opcodes.descriptionForOpcode(135))
  */
 function descriptionForOpcode (opcode) {
+  if (typeof opcode === 'string' && !isNaN(opcode)) {
+    opcode = parseInt(opcode)
+  }
   assert(opcodeIsValid(opcode), `${opcode} is not a valid opcode`)
   if (opcode >= 0x01 && opcode <= 0x4b) {
     // Special handling of push data opcodes
@@ -110,7 +119,7 @@ function descriptionForWord (word) {
  * Gets a description of the input for an opcode
  *
  * @memberof opcodes
- * @param {number} opcode
+ * @param {number|string} opcode as an integer or numeric string
  * @return {string} The description of the opcode's input
  * @throws AssertionError When opcode is invalid.
  * @example
@@ -118,6 +127,9 @@ function descriptionForWord (word) {
  * assert.equal(expected, opcodes.inputDescriptionForOpcode(135))
  */
 function inputDescriptionForOpcode (opcode) {
+  if (typeof opcode === 'string' && !isNaN(opcode)) {
+    opcode = parseInt(opcode)
+  }
   assert(opcodeIsValid(opcode), `${opcode} is not a valid opcode`)
   return opcodeInfoMap[opcode].input || ''
 }
@@ -141,7 +153,7 @@ function inputDescriptionForWord (word) {
  * Gets a description of the output for an opcode
  *
  * @memberof opcodes
- * @param {number} opcode
+ * @param {number|string} opcode as an integer or numeric string
  * @return {string} The description of the opcode's output
  * @throws AssertionError When opcode is invalid.
  * @example
@@ -149,6 +161,9 @@ function inputDescriptionForWord (word) {
  * assert.equal(expected, opcodes.outputDescriptionForOpcode(135))
  */
 function outputDescriptionForOpcode (opcode) {
+  if (typeof opcode === 'string' && !isNaN(opcode)) {
+    opcode = parseInt(opcode)
+  }
   assert(opcodeIsValid(opcode), `${opcode} is not a valid opcode`)
   return opcodeInfoMap[opcode].output || ''
 }
@@ -172,7 +187,7 @@ function outputDescriptionForWord (word) {
  * Gets whether or not an opcode is disabled in bitcoin-core
  *
  * @memberof opcodes
- * @param {number} opcode
+ * @param {number|string} opcode as an integer or numeric string
  * @return {boolean} `true` if the opcode is disabled, `false` if not
  * @throws AssertionError When opcode is invalid.
  * @example
@@ -180,6 +195,9 @@ function outputDescriptionForWord (word) {
  * assert.equal(true, opcodes.opcodeIsDisabled(134))
  */
 function opcodeIsDisabled (opcode) {
+  if (typeof opcode === 'string' && !isNaN(opcode)) {
+    opcode = parseInt(opcode)
+  }
   assert(opcodeIsValid(opcode), `${opcode} is not a valid opcode`)
   return opcodeInfoMap[opcode].disabled
 }
