@@ -84,6 +84,10 @@ function wordIsValid (word) {
  */
 function descriptionForOpcode (opcode) {
   assert(opcodeIsValid(opcode), `${opcode} is not a valid opcode`)
+  if (opcode >= 0x01 && opcode <= 0x4b) {
+    // Special handling of push data opcodes
+    return `The next ${opcode === 1 ? 'byte' : `${opcode} bytes`} is data to be pushed onto the stack`
+  }
   return opcodeInfoMap[opcode].description || ''
 }
 
