@@ -69,6 +69,11 @@ describe('opcodes', function () {
     it('throws if the term does not exist', function () {
       expect(() => descriptionForOpcode(257)).to.throw('257 is not a valid opcode')
     })
+    it('handles push data opcodes (0x01-0x4b) specially', function () {
+      expect(descriptionForOpcode(1)).to.equal('The next byte is data to be pushed onto the stack')
+      expect(descriptionForOpcode(2)).to.equal('The next 2 bytes is data to be pushed onto the stack')
+      expect(descriptionForOpcode(75)).to.equal('The next 75 bytes is data to be pushed onto the stack')
+    })
   })
 
   describe('.descriptionForWord', function () {
