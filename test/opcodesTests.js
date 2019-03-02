@@ -34,6 +34,10 @@ describe('opcodes', function () {
       expect(wordForOpcode(95)).to.equal('OP_15')
       expect(wordForOpcode(0)).to.equal('OP_0')
     })
+    it('accepts a numeric string', function () {
+      expect(wordForOpcode('79')).to.equal('OP_1NEGATE')
+      expect(wordForOpcode('0x4f')).to.equal('OP_1NEGATE')
+    })
     it('throws if the opcode does not exist', function () {
       expect(() => wordForOpcode(257)).to.throw('257 is not a valid opcode')
       expect(() => wordForOpcode(-1)).to.throw('-1 is not a valid opcode')
@@ -51,6 +55,11 @@ describe('opcodes', function () {
       expect(opcodeIsValid(110)).to.equal(true)
       expect(opcodeIsValid(-1)).to.equal(false)
       expect(opcodeIsValid(256)).to.equal(false)
+    })
+
+    it('accepts a numeric string', function () {
+      expect(opcodeIsValid('79')).to.equal(true)
+      expect(opcodeIsValid('0x4f')).to.equal(true)
     })
   })
 
@@ -75,6 +84,11 @@ describe('opcodes', function () {
       expect(descriptionForOpcode(2)).to.equal('The next 2 bytes is data to be pushed onto the stack')
       expect(descriptionForOpcode(75)).to.equal('The next 75 bytes is data to be pushed onto the stack')
     })
+
+    it('accepts a numeric string', function () {
+      expect(descriptionForOpcode('135')).to.equal('Returns 1 if the inputs are exactly equal, 0 otherwise.')
+      expect(descriptionForOpcode('0x87')).to.equal('Returns 1 if the inputs are exactly equal, 0 otherwise.')
+    })
   })
 
   describe('.descriptionForWord', function () {
@@ -92,6 +106,10 @@ describe('opcodes', function () {
     })
     it('throws if the opcode does not exist', function () {
       expect(() => inputDescriptionForOpcode(257)).to.throw('257 is not a valid opcode')
+    })
+    it('accepts a numeric string', function () {
+      expect(inputDescriptionForOpcode('135')).to.equal('x1 x2')
+      expect(inputDescriptionForOpcode('0x87')).to.equal('x1 x2')
     })
   })
 
@@ -111,6 +129,10 @@ describe('opcodes', function () {
     it('throws if the opcode does not exist', function () {
       expect(() => outputDescriptionForOpcode(257)).to.throw('257 is not a valid opcode')
     })
+    it('accepts a numeric string', function () {
+      expect(outputDescriptionForOpcode('135')).to.equal('True / false')
+      expect(outputDescriptionForOpcode('0x87')).to.equal('True / false')
+    })
   })
 
   describe('.outputDescriptionForWord', function () {
@@ -129,6 +151,10 @@ describe('opcodes', function () {
     })
     it('throws if the opcode does not exist', function () {
       expect(() => opcodeIsDisabled(257)).to.throw('257 is not a valid opcode')
+    })
+    it('accepts a numeric string', function () {
+      expect(opcodeIsDisabled('135')).to.equal(false)
+      expect(opcodeIsDisabled('0x87')).to.equal(false)
     })
   })
 
