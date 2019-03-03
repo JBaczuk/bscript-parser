@@ -143,7 +143,7 @@ function parsePlaceHolder (chars, idx, terminator, start = idx) {
 
   const data = string.join('').trim()
 
-  return [placeholder(data, start), idx]
+  return [placeholder(data, start, idx), idx]
 }
 
 function parseTerm (chars, idx, options) {
