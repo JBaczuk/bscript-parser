@@ -3,6 +3,9 @@
   "version": "1.0.3",
   "description": "Node Bitcoin Script Parser",
   "main": "index.js",
+  "bin": {
+    "bscript": "./bin/bscript"
+  },
   "scripts": {
     "test": "nyc mocha",
     "lint": "eslint .",
@@ -30,9 +33,10 @@
   },
   "homepage": "https://github.com/JBaczuk/bscript-parser#readme",
   "dependencies": {
-    "depd": "2.0.0",
     "bech32": "1.1.3",
-    "bs58check": "2.1.2"
+    "bs58check": "2.1.2",
+    "commander": "2.19.0",
+    "depd": "2.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
