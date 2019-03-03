@@ -8,8 +8,40 @@ Node Bitcoin script parser
 
     $ npm i bscript-parser --save
 
-## Usage
+## CLI Usage
+General help:
+```
+$ bscript -h
+Usage: bscript [options] [command]
 
+Options:
+  -v, --version                    output the version number
+  -h, --help                       output usage information
+
+Commands:
+  assemble [options] <raw-script>
+  disassemble [options] <asm>
+  getopcode <word>
+  getword <opcode>
+  isvalid <opcode-or-word>
+  isdisabled <opcode-or-word>
+  describe <opcode-or-word>
+```
+
+Help for a specific command, e.g.:
+```
+$ bscript assemble -h
+Usage: assemble [options] <raw-script>
+
+Options:
+  -l, --literal-style [style]  Literal Style normal|brackets|prefixed|verbose (default: "normal")
+  -e, --encoding [encoding]    Encoding ascii|base64|binary|hex|utf8 (default: "hex")
+  -h, --help                   output usage information
+
+$ bscript assemble --literal-style normal 76a914306e2ea1eed91bf66dfe5d94f3957d4ba63bde8488acOP_DUP OP_HASH160 306e2ea1eed91bf66dfe5d94f3957d4ba63bde84 OP_EQUALVERIFY OP_CHECKSIG
+```
+
+## Module Usage
 You can parse raw hex string into an assembly string using:  
 
 ```javascript
