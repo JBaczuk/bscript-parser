@@ -94,6 +94,17 @@ class Token {
   }
 
   /**
+   * A short-hand helper to create a `Token.REPEAT` token.
+   *
+   * @param {number} startIndex - See the parameters for [Token](#token)
+   * @param {number} endIndex - See the parameters for [Token](#token)
+   * @return {Token}
+   */
+  static repeat (startIndex, endIndex) {
+    return new Token(Token.REPEAT, null, startIndex, endIndex)
+  }
+
+  /**
    * Convert a token into an asm string.
    *
    * @param {Options} options - Options for asm stringification.
@@ -151,6 +162,8 @@ class Token {
       }
     } else if (this.type === Token.PLACEHOLDER) {
       return `<${this.value}>`
+    } else if (this.type === Token.REPEAT) {
+      return `...`
     }
   }
 
@@ -205,6 +218,9 @@ class Token {
     } else if (this.type === Token.PLACEHOLDER) {
       // Return an OP_0 for a placeholder
       return Buffer.from('00', 'hex')
+    } else if (this.type === Token.REPEAT) {
+      // Return an empty buffer for a repeat
+      return Buffer.from('', 'hex')
     }
   }
 
@@ -235,8 +251,19 @@ Token.OPCODE = 'OPCODE'
 /**
  * Constant for the `type` property of a placeholder token.
  *
+ * This token is only used when `allowPlaceHolder` is `true`.
+ *
  * @type {string}
  */
 Token.PLACEHOLDER = 'PLACEHOLDER'
+
+/**
+ * Constant for the `type` property of a repeat token.
+ *
+ * This token is only used when `allowPlaceHolder` is `true`.
+ *
+ * @type {string}
+ */
+Token.REPEAT = 'REPEAT'
 
 module.exports = Token
