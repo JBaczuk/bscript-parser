@@ -58,6 +58,9 @@ function wordForOpcode (opcode) {
  * @throws AssertionError When the opcode is not a valid opcode.
  */
 function stringForOpcode (opcode) {
+  if (typeof opcode === 'string' && !isNaN(opcode)) {
+    opcode = parseInt(opcode)
+  }
   assert(opcodeIsValid(opcode), `${opcode} is not a valid opcode`)
   const info = opcodeInfoMap[opcode]
 

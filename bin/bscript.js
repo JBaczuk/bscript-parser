@@ -67,7 +67,7 @@ program
     if (isNaN(parseInt(opcode))) throw Error('<opcode> must be a single 8 bit integer')
     let word
     try {
-      word = bscript.opcodes.wordForOpcode(parseInt(opcode))
+      word = bscript.opcodes.stringForOpcode(parseInt(opcode))
     } catch (err) {
       console.error(err.message)
       return
@@ -120,7 +120,7 @@ program
     let description
     try {
       if (!isNaN(parseInt(value))) {
-        word = bscript.opcodes.wordForOpcode(parseInt(value))
+        word = bscript.opcodes.stringForOpcode(parseInt(value))
         description = bscript.opcodes.descriptionForOpcode(value)
       } else {
         word = value
