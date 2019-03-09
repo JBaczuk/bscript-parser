@@ -7,6 +7,7 @@ const {
   opcode,
   literal,
   placeholder,
+  repeat,
   LITERAL
 } = require('./token')
 
@@ -16,6 +17,7 @@ const L_SQUARE_BRACKET = '['
 const R_SQUARE_BRACKET = ']'
 const L_ANGLE_BRACKET = '<'
 const R_ANGLE_BRACKET = '>'
+const DOT = '.'
 const L_PAREN = '('
 const R_PAREN = ')'
 const ZERO = '0'
@@ -61,6 +63,12 @@ function nextOp (chars, idx, options) {
     return parseDataLiteral(chars, idx + 1, END_DATA_LITERAL, idx)
   } else if (first === L_ANGLE_BRACKET && options.allowPlaceHolder === true) {
     return parsePlaceHolder(chars, idx + 1, END_PLACEHOLDER, idx)
+  } else if (first === DOT && options.allowPlaceHolder) {
+    if (peek(chars, idx + 1) !== '.' || peek(chars, idx + 2) !== '.') {
+      throw new Error(`Unexpected character at position ${idx}`)
+    }
+
+    return [repeat(idx, idx + 3), idx + 3]
   } else if (first === ZERO) {
     const nextChar = peek(chars, idx, 1)
     if (X.has(nextChar)) {
